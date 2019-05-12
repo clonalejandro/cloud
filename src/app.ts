@@ -20,7 +20,7 @@ export default class App {
 
     /**
      * This function replace all
-     * @param {String} data
+     * @param {String || Object} data
      * @param {String} charToReplace charToReplace
      * @param {String} newChar newChar
      * @return {String} data
@@ -33,7 +33,7 @@ export default class App {
         while (data.includes(charToReplace))
             data = data.replace(charToReplace, newChar);
 
-        return data;
+        return data
     }
 
 
