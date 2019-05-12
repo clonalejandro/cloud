@@ -25,7 +25,7 @@ export default class App {
      * @param {String} newChar newChar
      * @return {String} data
      */
-    static replaceAll(data: any, charToReplace: string, newChar = ""): string {
+    public static replaceAll(data: any, charToReplace: string, newChar = ""): string {
         if (App.isNull(data)) return data;
 
         data = (typeof data != "string" ? data.toString() : data);
@@ -42,7 +42,7 @@ export default class App {
      * @param {*} data
      * @return {boolean} isNull
      */
-    static isNull(data: any): boolean {
+    public static isNull(data: any): boolean {
         return data == null || data  == undefined
     }
 
@@ -52,7 +52,7 @@ export default class App {
      * @param {String || Object} data message to debug
      * @param {String} type
      */
-    static debug(data: any, type = "INFO"): void {
+    public static debug(data: any, type = "INFO"): void {
         const prefix = `[${type}]`;
         const prompt = " ⇒ ";
 
