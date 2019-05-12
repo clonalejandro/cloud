@@ -1,0 +1,37 @@
+{
+    "name": "cloud",
+    "version": "1.0.0",
+    "description": "A basic cloud system with express, typescript and mongodb",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "clean": "rm -rf dist",
+        "build": "tsc",
+        "start": "node dist"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/clonalejandro/cloud.git"
+    },
+    "keywords": [
+        "mongo",
+        "mongodb",
+        "typescript",
+        "express",
+        "cloud",
+        "cloud",
+        "system",
+        "system"
+    ],
+    "author": "clonalejandro",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/clonalejandro/cloud/issues"
+    },
+    "homepage": "https://github.com/clonalejandro/cloud#readme",
+    "dependencies": {
+        "@types/express": "^4.16.1",
+        "express": "^4.16.4",
+        "typescript": "^3.4.5"
+    }
+}
