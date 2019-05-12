@@ -71,7 +71,7 @@ export default class App {
      */
     public start(port: number): void {
         this.server.listen(port, () => {
-            App.debug(`Starting cloud server listen port: ${port}`)
+            App.debug(`Starting cloud server listen port: ${port}  🎨`)
         })
     }
 
