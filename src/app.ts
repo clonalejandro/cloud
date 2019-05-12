@@ -11,7 +11,7 @@ export default class App {
 
     public server: express.Application
 
-    constructor(server: express.Application){
+    public constructor(server: express.Application){
         this.server = server
     }
 
