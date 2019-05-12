@@ -1,3 +1,6 @@
-cloud
+# cloud
+A basic cloud system with typescript, express and mongodb
 
-# WIP
+TODO: README.md
+
+# WIP
