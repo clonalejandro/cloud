@@ -5,6 +5,7 @@ npm-debug.log*
 
 # extra
 package-lock.json
+dist/*
 
 # Runtime data
 pids

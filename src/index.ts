@@ -1,8 +1,7 @@
+import App from './App';
 import express from 'express';
 
-const port = 3000;
 const server = express();
+const app = new App(server);
 
-server.listen(port, () => {
-    console.log(`Starting cloud server listen port: ${port}`)
-})
+app.start(3000)
