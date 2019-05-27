@@ -1,0 +1,27 @@
+{
+    "debug": false,
+    "port": 3001,
+    "apiKey": 54321,
+    "logo": "https://s.gravatar.com/avatar/549430497442fc376ed2ffaa53fc6877",
+    "webName": "cloncloud",
+    "description": "A cloud system with typescript",
+    "tagsString": "cloud, typescript, js, system",
+    "email": "master@yourdomain.com",
+    "webURI": "http://192.168.0.46",
+    "session": {
+        "secret": "54321A",
+        "resave": false,
+        "saveUninitialized": false,
+        "cookie": {
+            "maxAge": 2592000000
+        }
+    },
+    "mysql": {
+        "supportBigNumbers": true,
+        "bigNumberStrings": true,
+        "host": "localhost",
+        "database": "chat",
+        "user": "root",
+        "password": "1234"
+    }
+}
