@@ -12,4 +12,5 @@ const app = new App(server);
 app.startLogRotate();
 //TODO: app.configureProxy();
 app.configureServer(cookieParser, bodyParser, session, passport);
+app.prepareRoutes(passport);
 app.start()

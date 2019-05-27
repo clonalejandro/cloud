@@ -7,8 +7,10 @@ import Color from './utils/color';
 import TaskTimer from './utils/tasktimer';
 import Math from './utils/math';
 import Log from './utils/log';
+import Router from './utils/router';
 
 import config from '../assets/data/config.json';
+import routes from '../assets/data/routes.json';
 
 
 export default class App {
@@ -20,12 +22,14 @@ export default class App {
     private log: Log;
     private static log: Log;
 
+    public static config = config;
+    public static routes = routes;
     public static tasks = [{name: "", callback: ""}];
     
     public constructor(server: express.Application){
         this.server = server;
         this.log = new Log();
-        
+
         App.log = this.log;
     }
 
@@ -106,7 +110,7 @@ export default class App {
      * @param {*} err error
      */
     public static throwErr(err: any, type: string = "ERROR", res: any = undefined){
-        if(!App.isNull(err)) App.debug(
+        if (!App.isNull(err)) App.debug(
             err.message, (type == "ERROR" ? type : `${type}!ERROR`)
         )
         
@@ -128,6 +132,15 @@ export default class App {
     }
 
     
+    /**
+     * This function prepare all routes for the cloud server
+     * @param {*} passport
+     */
+    public prepareRoutes(passport: any): void {
+        new Router(App, this.server, passport).register()
+    }
+
+
     /**
      * This function configure the middlewares
      * @param {*} cookieParser cookieParser
