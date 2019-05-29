@@ -72,6 +72,7 @@ export default class Router {
         })
     }
 
+
     /**
      * This function render the users panel
      */

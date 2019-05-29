@@ -46,8 +46,8 @@ export default class Auth {
                     return done(err)
                 }
 
-                if (!user) return done(null, false, req.flash('message', 'User Not found!'))
-                if (!this.isValidPassword(user, password)) return done(null, false, req.flash('message', 'Invalid Password'))
+                if (!user) return done(null, false, req.flash('msg', 'User Not found!'))
+                if (!this.isValidPassword(user, password)) return done(null, false, req.flash('msg', 'Oops! Wrong password.'))
                 
                 return done(null, user)
             }
@@ -74,15 +74,16 @@ export default class Auth {
                     return done(err)
                 }
 
-                if (user) return done(null, false, req.flash('message', 'User Already Exists'))
-                
+                if (user) return done(null, false, req.flash('msg', 'That username is already taken.'))
+
                 const schema = new User({
                     email: req.body.email,
                     username: username,
                     password: this.createHash(password),
                     rankId: 0
-                })
-                .save((err: any) => {
+                });
+
+                schema.save((err: any) => {
                     if (err) this.App.throwErr(err, prefix)
                     else return done(null, schema)
                 })

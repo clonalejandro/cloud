@@ -130,7 +130,7 @@ export default class App {
      * This function starts the server
      */
     public start(): void {
-        this.server.use('/assets', express.static(`${ __dirname}/../public/assets/`, config.session.cookie));
+        this.server.use('/assets', express.static(`${ __dirname}/../../public/assets/`, config.session.cookie));
         this.server.set('views', 'views');
         this.server.set('view engine', 'pug');
 
