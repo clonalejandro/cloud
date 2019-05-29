@@ -1,0 +1,92 @@
+doctype html
+html(lang="en")
+    head
+        - var author = "clonalejandro"
+        - var twitter = "clonalejandro11"
+        - var title = `${webName}`
+        
+        meta(name="DC.title", content=`${title}`)
+        meta(property="og:title", content=`${title}`)
+        meta(name="twitter:title", content=`${title}`)
+        meta(charset="utf-8")
+        meta(lang="es")
+        meta(http-equiv="Content-Language", content="en")
+        meta(http-equiv="Content-Type", content="text/html; charset=UTF-8")
+        meta(name="description", content=`${description}`)
+        meta(name="keywords", content=`${tagsString}`)
+        meta(name="author", content=`${author}`)
+        link(rel="apple-touch-icon", sizes="120x120", alt=`${title}`, href=`${logo}?size=120`)
+        link(rel="apple-touch-icon", sizes="152x152", alt=`${title}`, href=`${logo}?size=152`)
+        link(rel="icon", href=`${logo}`, alt=`${title}`, type="image/png")
+        link(rel="shortcut icon", href=`${logo}`, alt=`${title}`, type="image/png")
+        meta(name="robots", content="all")
+        meta(name="distribution", content="global")
+        meta(name="google", content="translate")
+        meta(name="DC.creator", content=`${author}`)
+        meta(name="DC.description", content=`${description}`)
+        meta(property="og:description", content=`${description}`)
+        meta(property="og:type", content="website")
+        meta(property="og:url", content=`${webURI}`)
+        meta(property="og:image", content=`${logo}`)
+        meta(property="og:site_name", content=`${title}`)
+        meta(name="twitter:card", content="summary")
+        meta(name="twitter:site", content=`${twitter}`)
+        meta(name="twitter:description", content=`${description}`)
+        meta(name="twitter:image", content=`${logo}`)
+        meta(name="twitter:url", content=`${webURI}`)
+        meta(name="generator", content="clonacms")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0, shrink-to-fit=no")
+        meta(name="theme-color", content="#000000")
+        
+        title #{title}
+        
+        include helpers/cookies.pug
+        include helpers/assets.pug
+        link(rel='stylesheet', href="assets/css/panel.css")
+        link(rel='stylesheet', href="assets/css/menu.css")
+        body
+            div#wrapper
+                nav.navbar.navbar-expand-lg.navbar-light.bg-light
+                    a.navbar-brand(href="/")
+                        img(src="", data-src=`${logo}`, alt=`${webName}`)
+                    button.navbar-toggler(type="button", data-toggle="collapse", data-target="#navbar", aria-controls="navbar", aria-expanded="false", aria-label="Toggle navigation")
+                        span.navbar-toggler-icon
+                    div.collapse.navbar-collapse#navbar
+                        ul.navbar-nav.mr-auto
+                            if isAdmin
+                                li.nav-item.dropdown
+                                    a(href="#", role="button", id="serverDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")
+                                        i.fa.fa-connectdevelop.nav-icon
+                                    div.dropdown-menu(aria-labelledby="serverDropdown")
+                                        a.dropdown-item#joinPanel(href="#") Join a AdminPanel 
+                                            i.fa.fa-tachometer
+                                        a.dropdown-item(href="#") more... 
+                                            i.fa.fa-question
+                        ul.nav.navbar-nav.navbar-right
+                            li.nav-item.margin-rigth
+                                i.fa.fa-search 
+                            li.nav-item.dropdown
+                                a.dropdown-toggle(href="#", role="button", id="userDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")
+                                    | #{username}
+                                div.dropdown-menu(aria-labelledby="userDropdown")
+                                    a#settings.dropdown-item(href="#") Settings 
+                                        i.fa.fa-cog
+                                    a#deleteProfile.dropdown-item(href="#") Delete profile 
+                                        i.fa.fa-trash
+                                    a#logout.dropdown-item(href="#") Logout 
+                                        i.fa.fa-sign-out
+                //Notifications
+                div.container#notifications
+                    //include helpers/noscript.pug
+                
+                //Content
+                div.container#wrapper
+                    //TODO: sidebar
+                    h1 Welcome #{username} to panel 
+                    h4 Developed with much 
+                        i.fa.fa-heart
+                        |  by 
+                        a(href="https://clonalejandro.github.io", rel="noopener", target="_blank") clonalejandro
+
+            script const webURI = `${window.location.protocol}//${window.location.host}`;
+            script(src="assets/js/menu.js")
