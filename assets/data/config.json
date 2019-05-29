@@ -1,5 +1,5 @@
 {
-    "debug": false,
+    "debug": true,
     "port": 3001,
     "apiKey": 54321,
     "logo": "https://s.gravatar.com/avatar/549430497442fc376ed2ffaa53fc6877",
@@ -16,12 +16,7 @@
             "maxAge": 2592000000
         }
     },
-    "mysql": {
-        "supportBigNumbers": true,
-        "bigNumberStrings": true,
-        "host": "localhost",
-        "database": "chat",
-        "user": "root",
-        "password": "1234"
+    "database": {
+        "uri": "mongodb://localhost:27017/cloud"
     }
 }

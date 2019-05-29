@@ -8,6 +8,10 @@ import TaskTimer from './utils/tasktimer';
 import Math from './utils/math';
 import Log from './utils/log';
 import Router from './utils/router';
+import Mongo from './utils/mongo';
+import Auth from './utils/auth';
+
+import User from './orms/user';
 
 import config from '../assets/data/config.json';
 import routes from '../assets/data/routes.json';
@@ -19,9 +23,12 @@ export default class App {
     /** SMALL CONSTRUCTORS **/
 
     public server: express.Application
+    
     private log: Log;
+
     private static log: Log;
 
+    public static mongo: Mongo;
     public static config = config;
     public static routes = routes;
     public static tasks = [{name: "", callback: ""}];
@@ -31,6 +38,7 @@ export default class App {
         this.log = new Log();
 
         App.log = this.log;
+        App.mongo = new Mongo(App);
     }
 
 
@@ -157,10 +165,10 @@ export default class App {
         this.server.use(passport.initialize());
         this.server.use(passport.session());
 
-        //passport.serializeUser((user, done) => done(null, user.username));
-        //passport.deserializeUser((username, done) => App.UserOrm.getByUserName({username: username}, (err, rows) => done(err, rows[0])));
+        passport.serializeUser((user: any, done: any) => done(null, user._id));
+        passport.deserializeUser((id: any, done: any) => User.findById(id, (err, user) => done(err, user)));
        
-        //Auth = new Auth(App, passport)
+        new Auth(App, passport)
     }
 
 
