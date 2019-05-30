@@ -13,6 +13,8 @@ import Auth from './utils/auth';
 
 import User from './orms/user';
 
+import Api from './api/api';
+
 import config from '../assets/data/config.json';
 import routes from '../assets/data/routes.json';
 
@@ -28,6 +30,7 @@ export default class App {
 
     private static log: Log;
 
+    public static Api: Api;
     public static mongo: Mongo;
     public static config = config;
     public static routes = routes;
@@ -39,6 +42,7 @@ export default class App {
 
         App.log = this.log;
         App.mongo = new Mongo(App);
+        App.Api = new Api(App, server);
     }
 
 

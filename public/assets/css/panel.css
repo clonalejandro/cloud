@@ -1,3 +1,5 @@
+/** GENERAL **/
+
 body {
     height: 100%;
     font-family: "Open Sans","Helvetica Neue", sans-serif;
@@ -16,6 +18,9 @@ body:after {
     z-index: -1
 }
 
+
+/** ROUTER NAV **/
+
 #main {
     text-align: center;
     margin-top: 1%
@@ -25,6 +30,10 @@ body:after {
     display: block;
     padding: .4rem .1rem;
     margin-left: 1vh
+}
+
+.hide {
+    display: none
 }
 
 .route, .route:hover {
@@ -38,4 +47,21 @@ body:after {
 #fileSubmenu {
     height: 32px;
     margin-left: 1%
+}
+
+
+/** FILES **/
+
+.file {
+    display: inline-block;
+    margin-left: 3%
+}
+
+.file span {
+    word-break: break-all
+}
+
+.file img {
+    height: 48px;
+    width: 48px;
 }

@@ -5,12 +5,10 @@ import bodyParser from 'body-parser';
 import session from 'express-session';
 import passport from 'passport';
 
-
 const server = express();
 const app = new App(server);
 
 app.startLogRotate();
-//TODO: app.configureProxy();
 app.configureServer(cookieParser, bodyParser, session, passport);
 app.prepareRoutes(passport);
 app.start()

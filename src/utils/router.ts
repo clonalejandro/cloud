@@ -79,7 +79,17 @@ export default class Router {
     private renderPanel(): void {
         this.server.get('/',  this.isAuthenticated, (req: any, res: any) => {
             try {
+                const dir = req.query.dir;
+                const ApiFile = this.App.Api.ApiFile;
+
                 this.tempConfig.username = req.user.username;
+                
+                this.tempConfig.files = this.App.isNull(dir) ? 
+                    ApiFile.getContentFolder(this.tempConfig.username) :
+                    ApiFile.getContentFolder(this.tempConfig.username + dir);
+
+                console.log(this.tempConfig.files);
+                
                 res.render('panel', this.tempConfig)
             }
             catch (err){

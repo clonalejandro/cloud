@@ -121,11 +121,14 @@ html(lang="en")
                 
                 //Content
                 div.container#main
-                    center
-                        nav.nav#nav-router
-                            a.nav-link.nav-icon.route(href="/")
-                                i.fa.fa-home
-                            a.prompt
-                                i.fa.fa-angle-right.nav-icon
+                    nav.nav#nav-router
+                        a.nav-link.nav-icon.route(href="/?dir=/")
+                            i.fa.fa-home
+                        a.prompt
+                            i.fa.fa-angle-right.nav-icon
+                    div.hide#tempFiles
+                        each file in files
+                            p.tempFile= file
+                    div.files
             script(src="assets/js/menu.js")
             script(src="assets/js/panel.js")

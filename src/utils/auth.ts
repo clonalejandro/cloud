@@ -85,7 +85,10 @@ export default class Auth {
 
                 schema.save((err: any) => {
                     if (err) this.App.throwErr(err, prefix)
-                    else return done(null, schema)
+                    else {
+                        this.App.Api.ApiFile.createUserFolder(username);
+                        return done(null, schema)
+                    }
                 })
             });
 
