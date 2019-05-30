@@ -46,13 +46,53 @@ html(lang="en")
         link(rel='stylesheet', href="assets/css/menu.css")
         body
             div#wrapper
+                nav#sidebar
+                    div#dismiss
+                        i.fa.fa-arrow-left
+                    div.sidebar-header
+                        h3 Cloud 
+                            i.fa.fa-cloud
+                    ul.list-unstyled.components
+                        p My cloud 
+                        li.active
+                            a(href="#")
+                                i.fa.fa-home
+                                |  Home
+                        li
+                            a(href="#homeSubmenu", data-toggle="collapse", aria-expanded="false")
+                                i.fa.fa-share-alt
+                                |  Shared
+                            ul.collapse.list-unstyled#homeSubmenu
+                                li
+                                    a(href="#")
+                                        i.fa.fa-user
+                                        |  Shared with me 
+                                    a(href="#")
+                                        i.fa.fa-users
+                                        |  Shared with others 
+                        li
+                            a(href="#")
+                                i.fa.fa-trash
+                                |  Bin
+                    ul.list-unstyled.CTAs
+                        li
+                            a.support(href=`mailto:${email}Subject=Support%20help`, target="top") 
+                                i.fa.fa-envelope 
+                                |  Support
+                            a.open-source(href="https://github.com/clonalejandro/cloud", target="_blank")
+                                i.fa.fa-github
+                                |  Open Source
+                div.overlay
                 nav.navbar.navbar-expand-lg.navbar-light.bg-light
                     a.navbar-brand(href="/")
-                        img(src="", data-src=`${logo}`, alt=`${webName}`)
+                        img(src="", data-src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KCjxzdmcgdmVyc2lvbj0iMS4w%0D%0AIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NHB4IiBoZWlnaHQ9%0D%0AIjY0cHgiIHZpZXdCb3g9IjAgMCA0NjAgMzYwIiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJ4TWlkWU1p%0D%0AZCBtZWV0Ij4KICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLjAwMDAwMCw0NjAuMDAwMDAwKSBz%0D%0AY2FsZSgwLjEwMDAwMCwtMC4xMDAwMDApIiBmaWxsPSIjMDAwMDAwIiBzdHJva2U9Im5vbmUiPgog%0D%0AICAgPHBhdGggZD0iTTIwMjIgMzM3MCBsMyAtNTgxIDE2OSAtNSBjMTMzIC00IDE3MSAtMiAxNzcg%0D%0AOCAxMCAxNSAxMiA5MDggMiAxMDUxCi03IDExMiAtMyAxMDkgLTEwNyA3NyBsLTY2IC0yMSAtNzMg%0D%0AMjEgYy0zOSAxMiAtODAgMjQgLTkwIDI2IC0xNiA1IC0xNyAtMjUKLTE1IC01NzZ6Ii8+CiAgICA8%0D%0AcGF0aCBkPSJNMTE4MSAyNjA2IGMyIC0yIDE2NiAtODYgMzY0IC0xODYgMTk4IC0xMDAgMzY1IC0x%0D%0AODggMzcxIC0xOTQgMTIKLTExIDE0NCAtNDI0IDE0NCAtNDQ5IDAgLTE1IC02MzQgLTYwMCAtNjU1%0D%0AIC02MDUgLTEzIC0zIDQxIC02MiA4MyAtOTAgMTUgLTEwCjIyIC0yMiAxOSAtMzQgLTQgLTE0IDcg%0D%0ALTggMzcgMTkgMjMgMjEgMTExIDEwMSAxOTYgMTc5IDI5NSAyNjggMzQ1IDMxMyAzNDgKMzA5IDYg%0D%0ALTYgNzMgLTcyMCA2OCAtNzM4IC0yIC05IDAgLTE3IDUgLTE3IDUgMCA5IDQgOSA5IDAgNiAxMiA2%0D%0AIDMyIDAgNDQgLTEyCjQ4IC0xMiA0MSA3IC02IDE3IDU3IDcxNSA2NiA3MjYgNiA3IDM4IC0yMSAz%0D%0AODQgLTMzNCAxMDcgLTk4IDE5OSAtMTc4IDIwNQotMTc4IDIxIDAgOTEgNjEgMTE4IDEwNCAxNiAy%0D%0ANyA0NyA1OCA3MiA3MiA2NiAzOSA0OSAzOCAtMjMgLTIgLTM2IC0yMCAtNjkKLTM0IC03NCAtMzIg%0D%0ALTUgMSAtMTU1IDEzNyAtMzM0IDMwMSBsLTMyNSAyOTcgNjUgMjA4IGMzNiAxMTQgNzAgMjE4IDc2%0D%0AIDIzMSA5CjE3IDExMSA3MyAzODIgMjEwIDIzNiAxMTggMzYyIDE4NyAzNDggMTg5IC0xMSAyIC0y%0D%0AMzQgLTkgLTQ5NSAtMjMgLTI2MCAtMTUKLTUwNCAtMjYgLTU0MyAtMjYgLTM4IDEgLTI3MCAxMiAt%0D%0ANTE1IDI2IC00ODYgMjcgLTQ3NSAyNyAtNDY5IDIxeiIvPjwvZz4KPC9zdmc+Cg==", alt=`${webName}`)
                     button.navbar-toggler(type="button", data-toggle="collapse", data-target="#navbar", aria-controls="navbar", aria-expanded="false", aria-label="Toggle navigation")
                         span.navbar-toggler-icon
                     div.collapse.navbar-collapse#navbar
                         ul.navbar-nav.mr-auto
+                            li.nav-item
+                                button.btn.rounded#openSidebar 
+                                    i.fa.fa-cloud.nav-icon
                             if isAdmin
                                 li.nav-item.dropdown
                                     a(href="#", role="button", id="serverDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")
@@ -64,7 +104,7 @@ html(lang="en")
                                             i.fa.fa-question
                         ul.nav.navbar-nav.navbar-right
                             li.nav-item.margin-rigth
-                                i.fa.fa-search 
+                                i.fa.fa-search#openSearch
                             li.nav-item.dropdown
                                 a.dropdown-toggle(href="#", role="button", id="userDropdown", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")
                                     | #{username}
@@ -77,16 +117,15 @@ html(lang="en")
                                         i.fa.fa-sign-out
                 //Notifications
                 div.container#notifications
-                    //include helpers/noscript.pug
+                    include helpers/noscript.pug
                 
                 //Content
-                div.container#wrapper
-                    //TODO: sidebar
-                    h1 Welcome #{username} to panel 
-                    h4 Developed with much 
-                        i.fa.fa-heart
-                        |  by 
-                        a(href="https://clonalejandro.github.io", rel="noopener", target="_blank") clonalejandro
-
-            script const webURI = `${window.location.protocol}//${window.location.host}`;
+                div.container#main
+                    center
+                        nav.nav#nav-router
+                            a.nav-link.nav-icon.route(href="/")
+                                i.fa.fa-home
+                            a.prompt
+                                i.fa.fa-angle-right.nav-icon
             script(src="assets/js/menu.js")
+            script(src="assets/js/panel.js")

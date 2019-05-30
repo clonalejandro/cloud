@@ -1,10 +1,41 @@
 body {
-    background-attachment: fixed;
     height: 100%;
+    font-family: "Open Sans","Helvetica Neue", sans-serif;
+    font-weight: 400;
+    line-height: 1.5em
+}
+
+body:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50vh;
+    background-image: linear-gradient(-180deg, #FFFFFF 0%, rgba(255, 255, 255, 0) 100%);
+    z-index: -1
+}
+
+#main {
     text-align: center;
-    background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
-    background-blend-mode: lighten;
-    background-position: 50% 50%;
-    background-repeat: no-repeat;
-    background-size: cover
+    margin-top: 1%
+}
+
+.prompt {
+    display: block;
+    padding: .4rem .1rem;
+    margin-left: 1vh
+}
+
+.route, .route:hover {
+    color: inherit
+}
+
+#fileSubmenu::before {
+    display: none!important
+}
+
+#fileSubmenu {
+    height: 32px;
+    margin-left: 1%
 }
