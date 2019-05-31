@@ -9,10 +9,14 @@ export default class ApiFile {
     /** SMALL CONSTRUCTORS **/
 
     public props: any = new Object();
+    
     private App: any;
+    private server: any;
 
-    public constructor(App: any){
+    public constructor(App: any, server: any){
         this.App = App;
+        this.server = server;
+
         this.props = {
             prefix: "API-FILE",
             folderPath: `${__dirname}/../../../data`
@@ -23,6 +27,15 @@ export default class ApiFile {
 
 
     /** REST **/
+    
+    /**
+     * This function register all api user routes
+     */
+    public register(): void {
+
+        this.App.debug("Registering all apiuser routes", this.props.prefix)
+    }
+
 
     /**
      * This function starts the apiFile creating a data folder
@@ -32,6 +45,24 @@ export default class ApiFile {
             fs.mkdirSync(this.props.folderPath);
             this.App.debug("Creating data folder", this.props.prefix)
         }
+    }
+
+    
+    private moveFileToFolderRest(){
+        this.server.get('/api/', (req: any, res: any) => {
+            try {
+                const bind = {
+                    username: req.user.username,
+                    currentDir: this.App.replaceAll(req.body.currentDir, "..", ""),
+                    newDir: this.App.replaceAll(req.body.newDir, "..", "")
+                };
+
+
+            }
+            catch (err){
+                this.App.throwErr(err, this.props.prefix, res)
+            }
+        })
     }
 
 
@@ -68,5 +99,20 @@ export default class ApiFile {
             this.App.throwErr(err, this.props.prefix)
             return []
         }
+    }
+
+
+    /**
+     * This function move file to other folder
+     * @param {String} username 
+     * @param {String} currentDir 
+     * @param {String} newDir 
+     * @param {*} callback 
+     */
+    public moveFileToFolder(username: string, currentDir: string, newDir: string, callback: any): void {
+        const current: string = `${this.props.folderPath}/${username}/${currentDir}`;
+        const neu = `${this.props.folderPath}/${username}/${newDir}`;
+
+        fs.rename(current, neu, err => callback(err))
     }
 }

@@ -13,22 +13,8 @@ String.prototype.replaceAll = function(charToReplace, newChar){
  * @return {String} extension
  */
 function resolveFileExtension(filename){
+    if (!filename.includes(".")) return;
     return filename.slice(filename.lastIndexOf(".")+1, filename.length);
-}
-
-
-/**
- * This function resolve and image from extension
- * @param {String} extension 
- * @return {String} imageClass
- */
-function resolveImageFromExtension(extension){
-    switch (extension.toUpperCase()){
-        default:
-            return "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/PjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgNTYgNTYiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDU2IDU2OyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PGc+PHBhdGggc3R5bGU9ImZpbGw6I0U5RTlFMDsiIGQ9Ik0zNi45ODUsMEg3Ljk2M0M3LjE1NSwwLDYuNSwwLjY1NSw2LjUsMS45MjZWNTVjMCwwLjM0NSwwLjY1NSwxLDEuNDYzLDFoNDAuMDc0YzAuODA4LDAsMS40NjMtMC42NTUsMS40NjMtMVYxMi45NzhjMC0wLjY5Ni0wLjA5My0wLjkyLTAuMjU3LTEuMDg1TDM3LjYwNywwLjI1N0MzNy40NDIsMC4wOTMsMzcuMjE4LDAsMzYuOTg1LDB6Ii8+PHBvbHlnb24gc3R5bGU9ImZpbGw6I0Q5RDdDQTsiIHBvaW50cz0iMzcuNSwwLjE1MSAzNy41LDEyIDQ5LjM0OSwxMiAiLz48cGF0aCBzdHlsZT0iZmlsbDojQzhCREI4OyIgZD0iTTQ4LjAzNyw1Nkg3Ljk2M0M3LjE1NSw1Niw2LjUsNTUuMzQ1LDYuNSw1NC41MzdWMzloNDN2MTUuNTM3QzQ5LjUsNTUuMzQ1LDQ4Ljg0NSw1Niw0OC4wMzcsNTZ6Ii8+PGNpcmNsZSBzdHlsZT0iZmlsbDojRkZGRkZGOyIgY3g9IjE4LjUiIGN5PSI0NyIgcj0iMyIvPjxjaXJjbGUgc3R5bGU9ImZpbGw6I0ZGRkZGRjsiIGN4PSIyOC41IiBjeT0iNDciIHI9IjMiLz48Y2lyY2xlIHN0eWxlPSJmaWxsOiNGRkZGRkY7IiBjeD0iMzguNSIgY3k9IjQ3IiByPSIzIi8+PC9nPjxnPjwvZz48Zz48L2c+PGc+PC9nPjxnPjwvZz48Zz48L2c+PGc+PC9nPjxnPjwvZz48Zz48L2c+PGc+PC9nPjxnPjwvZz48Zz48L2c+PGc+PC9nPjxnPjwvZz48Zz48L2c+PGc+PC9nPjwvc3ZnPg==";
-        case "TXT":
-            return "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/PjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgNTYgNTYiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDU2IDU2OyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PGc+PHBhdGggc3R5bGU9ImZpbGw6I0U5RTlFMDsiIGQ9Ik0zNi45ODUsMEg3Ljk2M0M3LjE1NSwwLDYuNSwwLjY1NSw2LjUsMS45MjZWNTVjMCwwLjM0NSwwLjY1NSwxLDEuNDYzLDFoNDAuMDc0YzAuODA4LDAsMS40NjMtMC42NTUsMS40NjMtMVYxMi45NzhjMC0wLjY5Ni0wLjA5My0wLjkyLTAuMjU3LTEuMDg1TDM3LjYwNywwLjI1N0MzNy40NDIsMC4wOTMsMzcuMjE4LDAsMzYuOTg1LDB6Ii8+PHBvbHlnb24gc3R5bGU9ImZpbGw6I0Q5RDdDQTsiIHBvaW50cz0iMzcuNSwwLjE1MSAzNy41LDEyIDQ5LjM0OSwxMiAiLz48cGF0aCBzdHlsZT0iZmlsbDojOTVBNUE1OyIgZD0iTTQ4LjAzNyw1Nkg3Ljk2M0M3LjE1NSw1Niw2LjUsNTUuMzQ1LDYuNSw1NC41MzdWMzloNDN2MTUuNTM3QzQ5LjUsNTUuMzQ1LDQ4Ljg0NSw1Niw0OC4wMzcsNTZ6Ii8+PGc+PHBhdGggc3R5bGU9ImZpbGw6I0ZGRkZGRjsiIGQ9Ik0yMS44NjcsNDIuOTI0djEuMTIxaC0zLjAwOFY1M2gtMS42NTR2LTguOTU1aC0zLjAwOHYtMS4xMjFIMjEuODY3eiIvPjxwYXRoIHN0eWxlPSJmaWxsOiNGRkZGRkY7IiBkPSJNMjguNDQzLDQ4LjEwNUwzMSw1M2gtMS45bC0xLjYtMy44MDFoLTAuMTM3TDI1LjY0MSw1M2gtMS45bDIuNTU3LTQuODk1bC0yLjcyMS01LjE4MmgxLjg3M2wxLjc3Nyw0LjEwMmgwLjEzN2wxLjkyOC00LjEwMmgxLjg3M0wyOC40NDMsNDguMTA1eiIvPjxwYXRoIHN0eWxlPSJmaWxsOiNGRkZGRkY7IiBkPSJNNDAuNTI5LDQyLjkyNHYxLjEyMWgtMy4wMDhWNTNoLTEuNjU0di04Ljk1NWgtMy4wMDh2LTEuMTIxSDQwLjUyOXoiLz48L2c+PHBhdGggc3R5bGU9ImZpbGw6I0M4QkRCODsiIGQ9Ik0xOC41LDEzaC02Yy0wLjU1MywwLTEtMC40NDgtMS0xczAuNDQ3LTEsMS0xaDZjMC41NTMsMCwxLDAuNDQ4LDEsMVMxOS4wNTMsMTMsMTguNSwxM3oiLz48cGF0aCBzdHlsZT0iZmlsbDojQzhCREI4OyIgZD0iTTIxLjUsMThoLTljLTAuNTUzLDAtMS0wLjQ0OC0xLTFzMC40NDctMSwxLTFoOWMwLjU1MywwLDEsMC40NDgsMSwxUzIyLjA1MywxOCwyMS41LDE4eiIvPjxwYXRoIHN0eWxlPSJmaWxsOiNDOEJEQjg7IiBkPSJNMjUuNSwxOGMtMC4yNiwwLTAuNTIxLTAuMTEtMC43MS0wLjI5Yy0wLjE4MS0wLjE5LTAuMjktMC40NC0wLjI5LTAuNzFzMC4xMDktMC41MiwwLjMtMC43MWMwLjM2LTAuMzcsMS4wNC0wLjM3LDEuNDEsMGMwLjE4LDAuMTksMC4yOSwwLjQ1LDAuMjksMC43MWMwLDAuMjYtMC4xMSwwLjUyLTAuMjksMC43MUMyNi4wMiwxNy44OSwyNS43NiwxOCwyNS41LDE4eiIvPjxwYXRoIHN0eWxlPSJmaWxsOiNDOEJEQjg7IiBkPSJNMzcuNSwxOGgtOGMtMC41NTMsMC0xLTAuNDQ4LTEtMXMwLjQ0Ny0xLDEtMWg4YzAuNTUzLDAsMSwwLjQ0OCwxLDFTMzguMDUzLDE4LDM3LjUsMTh6Ii8+PHBhdGggc3R5bGU9ImZpbGw6I0M4QkRCODsiIGQ9Ik0xMi41LDMzYy0wLjI2LDAtMC41MjEtMC4xMS0wLjcxLTAuMjljLTAuMTgxLTAuMTktMC4yOS0wLjQ1LTAuMjktMC43MWMwLTAuMjYsMC4xMDktMC41MiwwLjI5LTAuNzFjMC4zNy0wLjM3LDEuMDUtMC4zNywxLjQyLDAuMDFjMC4xOCwwLjE4LDAuMjksMC40NCwwLjI5LDAuN2MwLDAuMjYtMC4xMSwwLjUyLTAuMjksMC43MUMxMy4wMiwzMi44OSwxMi43NiwzMywxMi41LDMzeiIvPjxwYXRoIHN0eWxlPSJmaWxsOiNDOEJEQjg7IiBkPSJNMjQuNSwzM2gtOGMtMC41NTMsMC0xLTAuNDQ4LTEtMXMwLjQ0Ny0xLDEtMWg4YzAuNTUzLDAsMSwwLjQ0OCwxLDFTMjUuMDUzLDMzLDI0LjUsMzN6Ii8+PHBhdGggc3R5bGU9ImZpbGw6I0M4QkRCODsiIGQ9Ik00My41LDE4aC0yYy0wLjU1MywwLTEtMC40NDgtMS0xczAuNDQ3LTEsMS0xaDJjMC41NTMsMCwxLDAuNDQ4LDEsMVM0NC4wNTMsMTgsNDMuNSwxOHoiLz48cGF0aCBzdHlsZT0iZmlsbDojQzhCREI4OyIgZD0iTTM0LjUsMjNoLTIyYy0wLjU1MywwLTEtMC40NDgtMS0xczAuNDQ3LTEsMS0xaDIyYzAuNTUzLDAsMSwwLjQ0OCwxLDFTMzUuMDUzLDIzLDM0LjUsMjN6Ii8+PHBhdGggc3R5bGU9ImZpbGw6I0M4QkRCODsiIGQ9Ik00My41LDIzaC02Yy0wLjU1MywwLTEtMC40NDgtMS0xczAuNDQ3LTEsMS0xaDZjMC41NTMsMCwxLDAuNDQ4LDEsMVM0NC4wNTMsMjMsNDMuNSwyM3oiLz48cGF0aCBzdHlsZT0iZmlsbDojQzhCREI4OyIgZD0iTTE2LjUsMjhoLTRjLTAuNTUzLDAtMS0wLjQ0OC0xLTFzMC40NDctMSwxLTFoNGMwLjU1MywwLDEsMC40NDgsMSwxUzE3LjA1MywyOCwxNi41LDI4eiIvPjxwYXRoIHN0eWxlPSJmaWxsOiNDOEJEQjg7IiBkPSJNMzAuNSwyOGgtMTBjLTAuNTUzLDAtMS0wLjQ0OC0xLTFzMC40NDctMSwxLTFoMTBjMC41NTMsMCwxLDAuNDQ4LDEsMVMzMS4wNTMsMjgsMzAuNSwyOHoiLz48cGF0aCBzdHlsZT0iZmlsbDojQzhCREI4OyIgZD0iTTQzLjUsMjhoLTljLTAuNTUzLDAtMS0wLjQ0OC0xLTFzMC40NDctMSwxLTFoOWMwLjU1MywwLDEsMC40NDgsMSwxUzQ0LjA1MywyOCw0My41LDI4eiIvPjwvZz48Zz48L2c+PGc+PC9nPjxnPjwvZz48Zz48L2c+PGc+PC9nPjxnPjwvZz48Zz48L2c+PGc+PC9nPjxnPjwvZz48Zz48L2c+PGc+PC9nPjxnPjwvZz48Zz48L2c+PGc+PC9nPjxnPjwvZz48L3N2Zz4=";
-    }
 }
 
 
@@ -68,6 +54,22 @@ function deserailizeDirFromUrl(){
 
 
 /**
+ * This function register onclick folder event
+ */
+function makeFoldersAccesible(){
+    const folder = $(".file-folder").parent();
+    var currentDir = new URLSearchParams(window.location.search).get("dir");
+
+    if (isNull(currentDir)) currentDir = "/"; //If is null default dir is /
+
+    if (currentDir.charAt(currentDir.length -1) != "/") 
+        currentDir = currentDir.concat("/")//Add the last slash if this not have
+
+    folder.on('click', () => redirect(`${webURI}/?dir=${currentDir}${folder.find("span").text()}`))
+}
+
+
+/**
  * This function mount the html in the nav routes
  * @param {String} html 
  */
@@ -79,7 +81,7 @@ function makeNavRouter(html = undefined){
 
         dirs.forEach(row => {
             makeNavRouter(`
-                <a class="nav-link route" href="/?dir=${row.fullPath}/">
+                <a class="nav-link route" href="/?dir=${row.fullPath}" data-dir="${row.fullPath}">
                     <strong>${row.name}</strong>
                 </a>
                 <a class="prompt">
@@ -87,8 +89,16 @@ function makeNavRouter(html = undefined){
                 </a>
             `)
         });
+    }
+    else $("#nav-router").append(html)
+}
 
-        $("#nav-router").append(`
+
+/**
+ * This function draws a button in the navroute
+ */
+function makeNavActionButton(){
+    $("#nav-router").append(`
             <a class="nav-link route btn btn-secondary dropdown-toggle" href="#" id="fileSubmenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fa fa-plus"></i>
             </a>
@@ -107,8 +117,42 @@ function makeNavRouter(html = undefined){
                 </a>
             </div>
         `);
-    }
-    else $("#nav-router").append(html)
+}
+
+
+/**
+ * This function makes the drop in the nav route
+ */
+function makeDroppableNavRoute(){
+    return $('.route').droppable({
+        accept: '.file',
+        drop: (e, ui) => {
+            $(e.target).children().removeClass("dragOn");
+            $(ui.draggable).remove();
+
+            const dirTarget = $(e.target).data("dir");
+            const fileTarget = $(ui.draggable).find("span").text();
+
+            const bind = {
+                newDir: dirTarget + fileTarget,
+                currentDir: new URLSearchParams(window.location.search).get("dir") + fileTarget
+            }
+
+            console.log(bind)
+            //TODO: moves the file in the dir request
+        },
+        over: (e, ui) => $(e.target).children().addClass("dragOn"),
+        out: (e, ui) => $(e.target).children().removeClass("dragOn")
+    })
+}
+
+
+/**
+ * This function makes a fileHtml as draggable
+ * @param {*} fileHtml 
+ */
+function makeDraggableFile(fileHtml){
+    return $(fileHtml).draggable({revert: true});
 }
 
 
@@ -122,15 +166,15 @@ function drawFiles(){
 
         filesContainer.append(`
             <div class="file">
-                <img src="${
-                    resolveImageFromExtension(
-                        resolveFileExtension(file)
-                    )
+                <img class="file-${
+                    isNull(resolveFileExtension(file)) ? "folder" : resolveFileExtension(file)
                 }"><br>
-                <span class="badge badge-primary">${file}</span>
+                <span class="badge badge-secondary">${file}</span>
             </div>
         `);
-    })
+    });
+
+    makeDraggableFile($(".file"))
 }
 
 
@@ -139,5 +183,8 @@ function drawFiles(){
 $(document).ready(() => {
     new LazyLoad(250);
     makeNavRouter();
+    makeNavActionButton();
     drawFiles();
+    makeDroppableNavRoute();
+    makeFoldersAccesible();
 })

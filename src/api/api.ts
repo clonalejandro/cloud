@@ -18,7 +18,7 @@ export default class Api {
     public ApiUser: ApiUser;
 
     public constructor(App: any, server: any){
-        this.ApiFile = new ApiFile(App);
+        this.ApiFile = new ApiFile(App, server);
         this.ApiUser = new ApiUser(App, server);
     }
 }
