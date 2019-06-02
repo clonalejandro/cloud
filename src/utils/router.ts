@@ -176,7 +176,7 @@ export default class Router {
      */
     private isAuthenticated(req: any, res: any, next: any): void {
         if (req.isAuthenticated()) return next();
-        res.redirect('/login');
+        res.redirect('/login')
     }
 
 
@@ -188,7 +188,7 @@ export default class Router {
      */
     private preventRelogin(req: any, res: any, next: any): void {
         if (req.isAuthenticated()) res.redirect('/logout');
-        else next();
+        else next()
     }
 
 
