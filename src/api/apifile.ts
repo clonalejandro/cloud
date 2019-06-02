@@ -32,7 +32,8 @@ export default class ApiFile {
      * This function register all api user routes
      */
     public register(): void {
-
+        this.moveFileToFolderRest();
+        
         this.App.debug("Registering all apiuser routes", this.props.prefix)
     }
 
@@ -45,42 +46,6 @@ export default class ApiFile {
             fs.mkdirSync(this.props.folderPath);
             this.App.debug("Creating data folder", this.props.prefix)
         }
-    }
-
-    
-    private moveFileToFolderRest(){
-        this.server.get('/api/', (req: any, res: any) => {
-            try {
-                const bind = {
-                    username: req.user.username,
-                    currentDir: this.App.replaceAll(req.body.currentDir, "..", ""),
-                    newDir: this.App.replaceAll(req.body.newDir, "..", "")
-                };
-
-
-            }
-            catch (err){
-                this.App.throwErr(err, this.props.prefix, res)
-            }
-        })
-    }
-
-
-    /**
-     * This function removes from file list a banned files names
-     * @param {Array} files
-     * @return {Array} filesFiltered
-     */
-    private filterFiles(files: string[]): string[] {
-        const bannedFiles = this.App.config.bannedFiles;
-        const filesFiltered = new Array();
-        
-        files.forEach(file => {
-            if (!bannedFiles.includes(file))
-                filesFiltered.push(file)
-        });
-
-        return filesFiltered
     }
 
 
@@ -125,12 +90,51 @@ export default class ApiFile {
      * @param {String} username 
      * @param {String} currentDir 
      * @param {String} newDir 
-     * @param {*} callback 
+     * @param {*} callback
      */
     public moveFileToFolder(username: string, currentDir: string, newDir: string, callback: any): void {
         const current: string = `${this.props.folderPath}/${username}/${currentDir}`;
         const neu = `${this.props.folderPath}/${username}/${newDir}`;
 
-        fs.rename(current, neu, err => callback(err))
+        fs.rename(current, neu, callback)
+    }
+
+
+    /** OTHERS **/
+
+    /**
+     * This function move file via api
+     * Requeriments: (username, currentDir, newDir)
+     */
+    private moveFileToFolderRest(){
+        this.server.get('/api/', (req: any, res: any) => {
+            try {
+                const bind = {
+                    username: req.user.username,
+                    currentDir: this.App.replaceAll(req.body.currentDir, "..", ""),
+                    newDir: this.App.replaceAll(req.body.newDir, "..", "")
+                };
+
+                this.moveFileToFolder(bind.username, bind.currentDir, bind.newDir, (err: any) => {
+                    if (err) this.App.throwErr(err, this.props.prefix, res);
+                    else res.status(200).send("Ok!")
+                })
+            }
+            catch (err){
+                this.App.throwErr(err, this.props.prefix, res)
+            }
+        })
+    }
+
+
+    /**
+     * This function removes from file list a banned files names
+     * @param {Array} files
+     * @return {Array} filesFiltered
+     */
+    private filterFiles(files: string[]): string[] {
+        return files.filter(file => 
+            !this.App.config.bannedFiles.includes(file)
+        )
     }
 }
