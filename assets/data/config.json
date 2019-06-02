@@ -18,5 +18,8 @@
     },
     "database": {
         "uri": "mongodb://localhost:27017/cloud"
-    }
+    },
+    "bannedFiles": [
+        ".DS_Store"
+    ]
 }
