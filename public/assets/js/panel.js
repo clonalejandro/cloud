@@ -24,6 +24,9 @@ function resolveFileExtension(filename){
  * @param {String} dir 
  */
 function resolveFullPath(dirString, dir){
+    dirString = encodeURI(dirString);
+    dir = encodeURI(dir);
+
     let temp = dirString.replaceAll("/", " ");
     return temp.slice(0, temp.indexOf(dir) + dir.length).replaceAll(" ", "/")
 }
@@ -40,7 +43,7 @@ function deserailizeDirFromUrl(){
     
     if (isNull(dirString)) return;
 
-    dirString = dirString.replaceAll("%20", " ");
+    dirString = decodeURI(dirString);
 
     dirString.split("/").forEach(dir => {
         if (!isNull(dir)) dirs.push({
@@ -65,7 +68,7 @@ function makeFoldersAccesible(){
     if (currentDir.charAt(currentDir.length -1) != "/") 
         currentDir = currentDir.concat("/")//Add the last slash if this not have
 
-    folder.on('click', () => redirect(`${webURI}/?dir=${currentDir}${folder.find("span").text()}`))
+    folder.on('click', () => redirect(`${webURI}/?dir=${currentDir}${encodeURI(folder.find("span").text())}`))
 }
 
 
@@ -81,7 +84,7 @@ function makeNavRouter(html = undefined){
 
         dirs.forEach(row => {
             makeNavRouter(`
-                <a class="nav-link route" href="/?dir=${row.fullPath}" data-dir="${row.fullPath}">
+                <a class="nav-link route" href="/?dir=${encodeURI(row.fullPath)}" data-dir="${row.fullPath}">
                     <strong>${row.name}</strong>
                 </a>
                 <a class="prompt">

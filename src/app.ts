@@ -73,7 +73,7 @@ export default class App {
      * @return {boolean} isNull
      */
     public static isNull(data: any): boolean {
-        return data == null || data  == undefined
+        return data == null || data  == undefined || data == "undefined"
     }
 
 
