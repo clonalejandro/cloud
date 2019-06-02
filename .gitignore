@@ -3,11 +3,9 @@ logs
 *.log
 npm-debug.log*
 
-data
-dist
-
 # extra
 package-lock.json
+data
 dist/*
 
 # Runtime data
