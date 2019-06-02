@@ -67,6 +67,24 @@ export default class ApiFile {
 
 
     /**
+     * This function removes from file list a banned files names
+     * @param {Array} files
+     * @return {Array} filesFiltered
+     */
+    private filterFiles(files: string[]): string[] {
+        const bannedFiles = this.App.config.bannedFiles;
+        const filesFiltered = new Array();
+        
+        files.forEach(file => {
+            if (!bannedFiles.includes(file))
+                filesFiltered.push(file)
+        });
+
+        return filesFiltered
+    }
+
+
+    /**
      * This function creates a user folder
      * @param {String} username
      */
@@ -93,7 +111,7 @@ export default class ApiFile {
      */
     public getContentFolder(name: string): string[] {
         try {
-            return fs.readdirSync(`${this.props.folderPath}/${name}`)
+            return this.filterFiles(fs.readdirSync(`${this.props.folderPath}/${name}`))//TODO: check if file is folder for improve the file render system in the panel.js
         } 
         catch (err){
             this.App.throwErr(err, this.props.prefix)
