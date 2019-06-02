@@ -42,7 +42,6 @@ export default class App {
 
         App.log = this.log;
         App.mongo = new Mongo(App);
-        App.Api = new Api(App, server);
     }
 
 
@@ -150,6 +149,14 @@ export default class App {
      */
     public prepareRoutes(passport: any): void {
         new Router(App, this.server, passport).register()
+    }
+
+
+    /**
+     * This function starts the Api
+     */
+    public startApi(): void {
+        App.Api = new Api(App, this.server);
     }
 
 

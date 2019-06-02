@@ -60,15 +60,17 @@ function deserailizeDirFromUrl(){
  * This function register onclick folder event
  */
 function makeFoldersAccesible(){
-    const folder = $(".file-folder").parent();
-    var currentDir = new URLSearchParams(window.location.search).get("dir");
+    $(".file-folder").each(index => {
+        const folder = $($(".file-folder")[index]).parent();
+        var currentDir = new URLSearchParams(window.location.search).get("dir");
 
-    if (isNull(currentDir)) currentDir = "/"; //If is null default dir is /
-
-    if (currentDir.charAt(currentDir.length -1) != "/") 
-        currentDir = currentDir.concat("/")//Add the last slash if this not have
-
-    folder.on('click', () => redirect(`${webURI}/?dir=${currentDir}${encodeURI(folder.find("span").text())}`))
+        if (isNull(currentDir)) currentDir = "/"; //If is null default dir is /
+    
+        if (currentDir.charAt(currentDir.length -1) != "/") 
+            currentDir = currentDir.concat("/")//Add the last slash if this not have
+    
+        folder.on('click', () => redirect(`${webURI}/?dir=${currentDir}${encodeURI(folder.find("span").text())}`))
+    })
 }
 
 
@@ -119,7 +121,7 @@ function makeNavActionButton(){
                      Upload file
                 </a>
             </div>
-        `);
+    `);
 }
 
 
@@ -138,15 +140,23 @@ function makeDroppableNavRoute(){
 
             const bind = {
                 newDir: dirTarget + fileTarget,
-                currentDir: new URLSearchParams(window.location.search).get("dir") + fileTarget
+                currentDir: new URLSearchParams(window.location.search).get("dir") + "/" + fileTarget
             }
 
-            console.log(bind)
-            //TODO: moves the file in the dir request
+            const fixSlash = str => str.startsWith("/") ? str.slice(1, str.length) : str;
+
+            bind.newDir = fixSlash(bind.newDir);
+            bind.currentDir = fixSlash(bind.currentDir);
+
+            
+
+            moveFileRequest(bind, () => console.log("File transfered with data: ", bind))
         },
         over: (e, ui) => $(e.target).children().addClass("dragOn"),
         out: (e, ui) => $(e.target).children().removeClass("dragOn")
-    })
+    });
+
+    //TODO make folders droppable
 }
 
 
@@ -178,6 +188,16 @@ function drawFiles(){
     });
 
     makeDraggableFile($(".file"))
+}
+
+
+/** REQUESTS **/
+
+function moveFileRequest(bind, callback){
+    new Request(`${webURI}/api/move-file-to-folder?currentDir=${bind.currentDir}&newDir=${bind.newDir}`, "GET", e => {
+        if (e.status == 200 || e.responseText == "Ok!") callback();
+        else throwErr(e.responseText);
+    }, `currentDir=${bind.currentDir}&newDir=${bind.newDir}`)
 }
 
 

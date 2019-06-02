@@ -23,31 +23,11 @@ export default class ApiFile {
         }
 
         this.init();
+        this.register();
     }
 
 
     /** REST **/
-    
-    /**
-     * This function register all api user routes
-     */
-    public register(): void {
-        this.moveFileToFolderRest();
-        
-        this.App.debug("Registering all apiuser routes", this.props.prefix)
-    }
-
-
-    /**
-     * This function starts the apiFile creating a data folder
-     */
-    private init(): void {
-        if (!fs.existsSync(this.props.folderPath)){
-            fs.mkdirSync(this.props.folderPath);
-            this.App.debug("Creating data folder", this.props.prefix)
-        }
-    }
-
 
     /**
      * This function creates a user folder
@@ -96,23 +76,51 @@ export default class ApiFile {
         const current: string = `${this.props.folderPath}/${username}/${currentDir}`;
         const neu = `${this.props.folderPath}/${username}/${newDir}`;
 
-        fs.rename(current, neu, callback)
+        try {
+            if (fs.existsSync(newDir))
+                fs.rename(current, neu, callback)
+            else callback({message: "This file/folder al ready exists with this name"})
+        }
+        catch (err){
+            callback(err)
+        }
     }
 
 
     /** OTHERS **/
 
     /**
+     * This function register all api user routes
+     */
+    private register(): void {
+        this.moveFileToFolderRest();
+        
+        this.App.debug("Registering all apiuser routes", this.props.prefix)
+    }
+
+
+    /**
+     * This function starts the apiFile creating a data folder
+     */
+    private init(): void {
+        if (!fs.existsSync(this.props.folderPath)){
+            fs.mkdirSync(this.props.folderPath);
+            this.App.debug("Creating data folder", this.props.prefix)
+        }
+    }
+
+
+    /**
      * This function move file via api
      * Requeriments: (username, currentDir, newDir)
      */
     private moveFileToFolderRest(){
-        this.server.get('/api/', (req: any, res: any) => {
+        this.server.get('/api/move-file-to-folder', (req: any, res: any) => {
             try {
                 const bind = {
                     username: req.user.username,
-                    currentDir: this.App.replaceAll(req.body.currentDir, "..", ""),
-                    newDir: this.App.replaceAll(req.body.newDir, "..", "")
+                    currentDir: this.App.replaceAll(req.query.currentDir, "..", ""),
+                    newDir: this.App.replaceAll(req.query.newDir, "..", "")
                 };
 
                 this.moveFileToFolder(bind.username, bind.currentDir, bind.newDir, (err: any) => {

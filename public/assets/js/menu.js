@@ -62,7 +62,7 @@ function throwErr(message){
         <div class="alert alert-dimissible alert-danger">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
             <big><strong>Oops!</strong> An error has ocurred! <i class='fa fa-exclamation-triangle'></i></big><br>
-            ${message}
+            <p>${message}</p>
         </div>
     `;
     
