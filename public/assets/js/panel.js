@@ -14,7 +14,7 @@ String.prototype.replaceAll = function(charToReplace, newChar){
  */
 function resolveFileExtension(filename){
     if (!filename.includes(".")) return;
-    return filename.slice(filename.lastIndexOf(".")+1, filename.length);
+    return filename.slice(filename.lastIndexOf(".")+1, filename.length)
 }
 
 
