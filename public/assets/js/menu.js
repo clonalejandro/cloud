@@ -66,7 +66,7 @@ function throwErr(message){
         </div>
     `;
     
-    $("#notifications").append(html);
+    $("#notifications").append(html)
 }
 
 

@@ -14,7 +14,7 @@ String.prototype.replaceAll = function(charToReplace, newChar){
  */
 function resolveFileExtension(filename){
     if (!filename.includes(".")) return;
-    return filename.slice(filename.lastIndexOf(".")+1, filename.length)
+    return filename.slice(filename.lastIndexOf(".")+1, filename.length).toLowerCase()
 }
 
 
@@ -126,37 +126,87 @@ function makeNavActionButton(){
 
 
 /**
+ * This function makes the drop in the body
+ */
+function makeDroppableBody(){
+    return $("#drop form").on("drop", e => uploadFilesRequest(e.originalEvent.dataTransfer.files))
+}
+
+
+/**
+ * This function makes the drop in the folders
+ */
+function makeDroppableFolder(){
+    return $('.file[data-type="folder"]').droppable({
+        accept: '.file',
+        drop: (e, ui) => {
+            $(e.target).find("img").removeClass("dragOn");
+            $(e.target).find("span").removeClass("dragOn");//Remove the hover classes
+
+            const dirTarget = encodeURI($(e.target).find("span").text());
+            const fileTarget = $(ui.draggable).find("span").text();
+            
+            const fixInitSlash = str => str.startsWith("/") ? str.slice(1, str.length) : str;
+            const fixEndSlash = str => str.endsWith("/") ? str : str.concat("/");
+
+            const dir = new URLSearchParams(window.location.search).get("dir");
+
+            const bind = {
+                newDir: fixEndSlash(isNull(dir) ? "/" : dir) + dirTarget + "/" + fileTarget,
+                currentDir: fixEndSlash(isNull(dir) ? "/" : dir) + fileTarget
+            }//Remember that the api adds a slash to the route
+
+            bind.newDir = fixInitSlash(bind.newDir);
+            bind.currentDir = fixInitSlash(bind.currentDir);
+
+            moveFileRequest(bind, () => {
+                $(ui.draggable).remove();
+                console.log("File transfered with data: ", bind)
+            })
+        },
+        over: (e, ui) => {
+            $(e.target).find("img").addClass("dragOn");
+            $(e.target).find("span").addClass("dragOn")
+        },
+        out: (e, ui) => {
+            $(e.target).find("img").removeClass("dragOn");
+            $(e.target).find("span").removeClass("dragOn")
+        }
+    })
+}
+
+
+/**
  * This function makes the drop in the nav route
  */
 function makeDroppableNavRoute(){
     return $('.route').droppable({
         accept: '.file',
         drop: (e, ui) => {
-            $(e.target).children().removeClass("dragOn");
-            $(ui.draggable).remove();
+            $(e.target).children().removeClass("dragOn");//Remove the hover classes
 
             const dirTarget = $(e.target).data("dir");
             const fileTarget = $(ui.draggable).find("span").text();
+            
+            const fixInitSlash = str => str.startsWith("/") ? str.slice(1, str.length) : str;
+            const fixEndSlash = str => str.endsWith("/") ? str : str.concat("/");
 
             const bind = {
-                newDir: dirTarget + fileTarget,
-                currentDir: new URLSearchParams(window.location.search).get("dir") + "/" + fileTarget
+                newDir: dirTarget + "/" + fileTarget,
+                currentDir: fixEndSlash(new URLSearchParams(window.location.search).get("dir")) + fileTarget
             }
 
-            const fixSlash = str => str.startsWith("/") ? str.slice(1, str.length) : str;
+            bind.newDir = fixInitSlash(bind.newDir);
+            bind.currentDir = fixInitSlash(bind.currentDir);
 
-            bind.newDir = fixSlash(bind.newDir);
-            bind.currentDir = fixSlash(bind.currentDir);
-
-            
-
-            moveFileRequest(bind, () => console.log("File transfered with data: ", bind))
+            moveFileRequest(bind, () => {
+                $(ui.draggable).remove();
+                console.log("File transfered with data: ", bind)
+            })
         },
         over: (e, ui) => $(e.target).children().addClass("dragOn"),
         out: (e, ui) => $(e.target).children().removeClass("dragOn")
-    });
-
-    //TODO make folders droppable
+    })
 }
 
 
@@ -178,7 +228,7 @@ function drawFiles(){
         const filesContainer = $(".files");
 
         filesContainer.append(`
-            <div class="file">
+            <div class="file" data-type="${isNull(resolveFileExtension(file)) ? "folder" : "file"}">
                 <img class="file-${
                     isNull(resolveFileExtension(file)) ? "folder" : resolveFileExtension(file)
                 }"><br>
@@ -201,6 +251,35 @@ function moveFileRequest(bind, callback){
 }
 
 
+function uploadFilesRequest(files){
+    const $form = $("#drop form");
+    const $input = $("#drop form input[type='file']");
+    const ajaxData = new FormData($form.get(0));
+    
+    if (files) $.each(files, (i, file) => ajaxData.append($input.attr('name'), file, file.name));
+
+    $("#drop form #footer").html("<span>Uploading...</span>");
+
+    $.ajax({
+        url: $form.attr('action'),
+        type: $form.attr('method'),
+        data: ajaxData,
+        dataType: 'json',
+        cache: false,
+        contentType: false,
+        processData: false,
+        complete: e => {
+            $("#wrapper").removeClass("dragOn");
+            $("#drop").fadeOut(350, () => $(this).removeClass("hide"));
+            $("#drop form #footer").html("<span>Done!</span>");
+
+            if (e.responseText == "Ok!") redirect(webURI);
+            else throwErr(e.responseText);
+        }
+    })
+}
+
+
 /** METHODS **/
 
 $(document).ready(() => {
@@ -208,6 +287,29 @@ $(document).ready(() => {
     makeNavRouter();
     makeNavActionButton();
     drawFiles();
-    makeDroppableNavRoute();
     makeFoldersAccesible();
-})
+    makeDroppableNavRoute();
+    makeDroppableFolder();
+    makeDroppableBody();
+});
+
+
+/** EVENTS **/
+
+$('#drop').on('drag dragstart dragend dragover dragenter dragleave drop', e => {
+    e.preventDefault();
+    e.stopPropagation();
+    return false
+});
+
+$('body').on('dragenter', e => {
+    $("#wrapper").addClass("dragOn");
+    $("#drop").fadeIn(350, () => $(this).removeClass("hide"))
+});
+
+$("#drop #close").on('click', () => {
+    $("#wrapper").removeClass("dragOn");
+    $("#drop").fadeOut(350, () => $(this).removeClass("hide"))
+});
+
+$("#drop form input[type='file']").on('change', e => uploadFilesRequest(e.target.files));

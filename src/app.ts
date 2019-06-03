@@ -2,6 +2,7 @@
 
 import express from 'express';
 import flash from 'connect-flash';
+import fileUpload from 'express-fileupload';
 
 import Color from './utils/color';
 import TaskTimer from './utils/tasktimer';
@@ -175,6 +176,9 @@ export default class App {
         this.server.use(session(config.session));
         this.server.use(passport.initialize());
         this.server.use(passport.session());
+        this.server.use(fileUpload({
+            limits: { fileSize: 50 * 1024 * 1024 }
+        }));
 
         passport.serializeUser((user: any, done: any) => done(null, user._id));
         passport.deserializeUser((id: any, done: any) => User.findById(id, (err, user) => done(err, user)));

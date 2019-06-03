@@ -45,6 +45,19 @@ html(lang="en")
         link(rel='stylesheet', href="assets/css/panel.css")
         link(rel='stylesheet', href="assets/css/menu.css")
         body
+            div#drop.hide
+                button.btn.btn-danger#close
+                    i.fa.fa-times
+                form(action="/", method="post", enctype="multipart/form-data")
+                    div.drop-content
+                        h1
+                            i.fa.fa-cloud-upload
+                        br  
+                        
+                        div#footer
+                            input(type='file', name="files", multiple)
+                            strong Choose a file 
+                            span or drag it here.
             div#wrapper
                 nav#sidebar
                     div#dismiss

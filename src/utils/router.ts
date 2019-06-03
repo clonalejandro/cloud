@@ -82,19 +82,56 @@ export default class Router {
                 const dir = decodeURI(req.query.dir);
                 const ApiFile = this.App.Api.ApiFile;
 
-                this.tempConfig.username = req.user.username;
+                if (dir.includes("..")) res.redirect(encodeURI(
+                    '/?dir=' + this.App.replaceAll(this.App.replaceAll(dir, "../", ""), "..", "")
+                ))//Securityze the url
+                else {
+                    this.tempConfig.username = req.user.username;
                 
-                this.tempConfig.files = this.App.isNull(dir) ? 
-                    ApiFile.getContentFolder(this.tempConfig.username) :
-                    ApiFile.getContentFolder(this.tempConfig.username + dir);
-                
-                res.render('panel', this.tempConfig)
+                    this.tempConfig.files = this.App.isNull(dir) ? 
+                        ApiFile.getContentFolder(this.tempConfig.username) :
+                        ApiFile.getContentFolder(this.tempConfig.username + dir);
+                    
+                    res.render('panel', this.tempConfig)
+                }
             }
             catch (err){
                 this.App.throwErr(err, this.prefix, res)
             }
         });
         
+        //Upload
+        this.server.post('/', (req: any, res: any) => {
+            try {
+                const fixEndSlash = (str: any) => str.endsWith("/") ? str : str.concat("/");
+                
+                const uri: URL = new URL(req.headers.referer);
+                
+                const params: any = new URLSearchParams(uri.search).get("dir");
+                const ApiFile: any = this.App.Api.ApiFile;
+                
+                const dir: string = ApiFile.props.folderPath + "/" + req.user.username + fixEndSlash(
+                    this.App.isNull(params) ? "/" : params
+                );
+
+                Object.keys(req.files).forEach(key => {
+                    const files = req.files[key];
+                   
+                    if (files instanceof Array) files.forEach((file: any) => file.mv(dir + file.name, (err: any) => {
+                        if (err) this.App.throwErr(err, this.prefix, res)
+                    }))
+                    else files.mv(dir + files.name, (err: any) => {
+                        if (err) this.App.throwErr(err, this.prefix, res)
+                    })
+                });
+
+                res.status(200).send("Ok!")
+            }
+            catch (err){
+                this.App.throwErr(err, this.prefix, res)
+            }
+        });
+
         this.App.debug(`The server is registering route: "/panel" aiming to: panel`, this.prefix)
     }
 

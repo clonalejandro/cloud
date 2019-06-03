@@ -74,10 +74,10 @@ export default class ApiFile {
      */
     public moveFileToFolder(username: string, currentDir: string, newDir: string, callback: any): void {
         const current: string = `${this.props.folderPath}/${username}/${currentDir}`;
-        const neu = `${this.props.folderPath}/${username}/${newDir}`;
+        const neu: string = `${this.props.folderPath}/${username}/${newDir}`;
 
         try {
-            if (fs.existsSync(newDir))
+            if (!fs.existsSync(neu) || neu == currentDir)
                 fs.rename(current, neu, callback)
             else callback({message: "This file/folder al ready exists with this name"})
         }
