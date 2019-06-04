@@ -96,7 +96,7 @@ html {
 /** ROUTER NAV **/
 
 #back {
-    z-index: 9999;
+    z-index: 100;
     float: right;
     border-radius: 100%
 }
