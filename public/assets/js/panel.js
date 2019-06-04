@@ -108,15 +108,15 @@ function makeNavActionButton(){
                 <i class="fa fa-plus"></i>
             </a>
             <div class="dropdown-menu" aria-labelledby="fileSubmenu">
-                <a class="dropdown-item">
+                <a id="newFile" href="#" class="dropdown-item">
                     <i class="fa fa-file"></i>
                      New file
                 </a>
-                <a class="dropdown-item">
+                <a id="newFolder" href="#" class="dropdown-item">
                     <i class="fa fa-folder"></i>
                      New folder
                 </a>
-                <a class="dropdown-item">
+                <a id="uploadFile" href="#" class="dropdown-item">
                     <i class="fa fa-upload"></i>
                      Upload file
                 </a>
@@ -233,6 +233,9 @@ function drawFiles(){
                     isNull(resolveFileExtension(file)) ? "folder" : resolveFileExtension(file)
                 }"><br>
                 <span class="badge badge-secondary">${file}</span>
+                <a class="settings">
+                    <i class="fa fa-ellipsis-v"></i>
+                </a>
             </div>
         `);
     });
@@ -254,16 +257,42 @@ function moveFileRequest(bind, callback){
 function uploadFilesRequest(files){
     const $form = $("#drop form");
     const $input = $("#drop form input[type='file']");
+    const $bar = $("#drop .prog .progress-bar");
     const ajaxData = new FormData($form.get(0));
     
     if (files) $.each(files, (i, file) => ajaxData.append($input.attr('name'), file, file.name));
 
-    $("#drop form #footer").html(`<span>Uploading...</span>`;
+    if ($(".def").hasClass("hide")) $(".def").removeClass("hide")
+    if (!$(".nodef").hasClass("hide")) $(".nodef").removeClass("hide")
 
     $.ajax({
         url: $form.attr('action'),
         type: $form.attr('method'),
         data: ajaxData,
+        xhr: () => {
+            const req = $.ajaxSettings.xhr();
+
+            req.upload.addEventListener("loadstart", e => {
+                $form[0].reset();
+            });
+
+            req.upload.addEventListener("progress", e => {
+                $("#drop .prog").removeClass("hide");
+
+                if (e.lengthComputable){
+                    const percent = Math.round(e.loaded / e.total * 100);
+                    
+                    $("#drop .prog .percent").html(percent + "%");
+
+                    console.debug("Parsed upload: ", percent, "Noparsed upload: ", e.loaded / e.total * 100)
+                    
+                    $bar.css({width: percent});
+                    $bar.attr("aria-valuenow", percent);
+                }
+            }, false)
+
+            return req
+        },
         dataType: 'json',
         cache: false,
         contentType: false,
@@ -271,10 +300,17 @@ function uploadFilesRequest(files){
         complete: e => {
             $("#wrapper").removeClass("dragOn");
             $("#drop").fadeOut(350, () => $(this).removeClass("hide"));
-            $("#drop form #footer").html(`<span>Done!</span>`);
+            
+            $(".def").addClass("hide");
+            $(".nodef").removeClass("hide");
 
-            if (e.responseText == "Ok!") redirect(webURI);
-            else throwErr(e.responseText);
+            $("#drop .prog .percent").html("0%");
+            
+            $bar.css({width: 0});
+            $bar.attr("aria-valuenow", 0);
+
+            if (e.responseText == "Ok!") redirect(window.location.href);
+            else throwErr(e.responseText || e.statusText);
         }
     })
 }
@@ -291,6 +327,7 @@ $(document).ready(() => {
     makeDroppableNavRoute();
     makeDroppableFolder();
     makeDroppableBody();
+    navButtonEvents();
 });
 
 
@@ -322,4 +359,11 @@ $(".btn#back").on('click', () => {
     uri = uri.slice(0, uri.lastIndexOf("/")+1);//Removes the last dir from url
 
     redirect(uri);
-})
+});
+
+function navButtonEvents(){
+    $("#uploadFile").on('click', () => {
+        $("#wrapper").addClass("dragOn");
+        $("#drop").fadeIn(350, () => $(this).removeClass("hide"))
+    });
+}

@@ -58,6 +58,8 @@ function isNull(data){
  * @param {String} message 
  */
 function throwErr(message){
+    if (message instanceof Object) message = JSON.stringify(message);
+    
     const html = `
         <div class="alert alert-dimissible alert-danger">
             <button type="button" class="close" data-dismiss="alert">&times;</button>

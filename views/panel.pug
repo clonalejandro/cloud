@@ -48,15 +48,23 @@ html(lang="en")
             div#drop.hide
                 button.btn.btn-danger#close
                     i.fa.fa-times
-                form(action="/", method="post", enctype="multipart/form-data")
-                    div.drop-content
-                        h1
-                            i.fa.fa-cloud-upload
-                        br
-                        div#footer
-                            input(type='file', name="files", multiple)
-                            strong Choose a file 
-                            span or drag it here.
+                center.center
+                    form(action="/", method="post", enctype="multipart/form-data")
+                        div.drop-content
+                            h1
+                                i.fa.fa-cloud-upload
+                            br
+                            div#footer
+                                input(type='file', name="files", multiple)
+                                strong.def Choose a file 
+                                span.def or drag it here.
+                                span.nodef.hide Done!
+                            div.container.prog.hide
+                                h4 Uploading... 
+                                    span.percent 0%
+                                br
+                                div.progress
+                                    div.progress-bar.progress-bar-striped.progress-bar-animated(role="progressbar", aria-valuenow="0", aria-valuemin="0", aria-valuemax="100", style="width: 0%")
             div#wrapper
                 nav#sidebar
                     div#dismiss
