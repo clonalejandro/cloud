@@ -258,7 +258,7 @@ function uploadFilesRequest(files){
     
     if (files) $.each(files, (i, file) => ajaxData.append($input.attr('name'), file, file.name));
 
-    $("#drop form #footer").html("<span>Uploading...</span>");
+    $("#drop form #footer").html(`<span>Uploading...</span>`;
 
     $.ajax({
         url: $form.attr('action'),
@@ -271,7 +271,7 @@ function uploadFilesRequest(files){
         complete: e => {
             $("#wrapper").removeClass("dragOn");
             $("#drop").fadeOut(350, () => $(this).removeClass("hide"));
-            $("#drop form #footer").html("<span>Done!</span>");
+            $("#drop form #footer").html(`<span>Done!</span>`);
 
             if (e.responseText == "Ok!") redirect(webURI);
             else throwErr(e.responseText);
@@ -313,3 +313,13 @@ $("#drop #close").on('click', () => {
 });
 
 $("#drop form input[type='file']").on('change', e => uploadFilesRequest(e.target.files));
+
+$(".btn#back").on('click', () => {
+    const routes = $("#nav-router").find(".route");
+    const last = routes.get(routes.length-2);//For get the last element because the last is a button
+    var uri = last.href;
+
+    uri = uri.slice(0, uri.lastIndexOf("/")+1);//Removes the last dir from url
+
+    redirect(uri);
+})

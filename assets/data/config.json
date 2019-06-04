@@ -8,6 +8,12 @@
     "tagsString": "cloud, typescript, js, system",
     "email": "master@yourdomain.com",
     "webURI": "http://192.168.0.46",
+    "blob": {
+        "abortOnLimit": true,
+        "limits": {
+            "fileSize": 52428800
+        }
+    },
     "session": {
         "secret": "54321A",
         "resave": false,

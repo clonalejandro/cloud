@@ -52,8 +52,7 @@ html(lang="en")
                     div.drop-content
                         h1
                             i.fa.fa-cloud-upload
-                        br  
-                        
+                        br
                         div#footer
                             input(type='file', name="files", multiple)
                             strong Choose a file 
@@ -134,6 +133,8 @@ html(lang="en")
                 
                 //Content
                 div.container#main
+                    button.btn.btn-primary#back
+                        i.fa.fa-arrow-left
                     nav.nav#nav-router
                         a.nav-link.nav-icon.route(href="/?dir=/", data-dir="/")
                             i.fa.fa-home

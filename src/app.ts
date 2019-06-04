@@ -176,9 +176,7 @@ export default class App {
         this.server.use(session(config.session));
         this.server.use(passport.initialize());
         this.server.use(passport.session());
-        this.server.use(fileUpload({
-            limits: { fileSize: 50 * 1024 * 1024 }
-        }));
+        this.server.use(fileUpload(config.blob));
 
         passport.serializeUser((user: any, done: any) => done(null, user._id));
         passport.deserializeUser((id: any, done: any) => User.findById(id, (err, user) => done(err, user)));
