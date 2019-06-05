@@ -77,7 +77,7 @@ export default class Router {
      * This function render the users panel
      */
     private renderPanel(): void {
-        this.server.get('/',  this.isAuthenticated, (req: any, res: any) => {
+        this.server.get('/', this.isAuthenticated, (req: any, res: any) => {
             try {
                 const dir = decodeURI(req.query.dir);
                 const ApiFile = this.App.Api.ApiFile;

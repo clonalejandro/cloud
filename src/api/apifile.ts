@@ -137,6 +137,7 @@ export default class ApiFile {
     private register(): void {
         this.moveFileToFolderRest();
         this.createFolderRest();
+        this.downloadFile();
 
         this.App.debug("Registering all apiuser routes", this.props.prefix)
     }
@@ -194,6 +195,27 @@ export default class ApiFile {
                     if (err) this.App.throwErr(err, this.props.prefix, res)
                     else res.status(200).send("Ok!")
                 })
+            }
+            catch (err){
+                this.App.throwErr(err, this.props.prefix, res)
+            }
+        })
+    }
+
+
+    /**
+     * This function send file via api
+     * Requeriments: (username, file)
+     */
+    private downloadFile(){
+        this.server.get('/api/download-file', (req: any, res: any) => {
+            try {
+                const bind = {
+                    username: req.user.username,
+                    file: req.query.file
+                };
+
+                res.download(`${this.props.folderPath}/${bind.username}/${bind.file}`)
             }
             catch (err){
                 this.App.throwErr(err, this.props.prefix, res)

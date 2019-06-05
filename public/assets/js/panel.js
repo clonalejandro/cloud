@@ -83,6 +83,29 @@ function makeFoldersAccesible(){
 
 
 /**
+ * This function register onclick download event
+ */
+function makeFilesDownloable(){
+    $("#settingsSubmenu .download").each(index => {
+        const file = $($("#settingsSubmenu .download")[index]).parent().parent();
+        const target = $($("#settingsSubmenu .download")[index]);
+        var currentDir = new URLSearchParams(window.location.search).get("dir");
+
+        
+        if (isNull(currentDir)) currentDir = "/"; //If is null default dir is /
+    
+        if (currentDir.charAt(currentDir.length -1) != "/") 
+            currentDir = currentDir.concat("/")//Add the last slash if this not have
+        
+        console.log(currentDir + file.find("span").text());
+        target.attr("href", `${webURI}/api/download-file/?file=${currentDir}${encodeURI(
+            file.find("span").text()
+        )}`)
+    })
+}
+
+
+/**
  * This function mount the html in the nav routes
  * @param {String} html 
  */
@@ -240,7 +263,11 @@ function drawFiles(){
                 <a class="settings dropdown-toggle" id="settingsSubmenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fa fa-ellipsis-v"></i>
                 </a>
-                <div id="settingsSubmenu" class="dropdown-menu settingsSubmenu" aria-labelledby="settingsSubmenu">
+                <div id="settingsSubmenu" class="dropdown-menu" aria-labelledby="settingsSubmenu">
+                    <a class="dropdown-item download" download>
+                        <i class="fa fa-download"></i>
+                        Download
+                    </a>
                     <a class="dropdown-item share">
                         <i class="fa fa-share-alt"></i>
                         Share
@@ -374,10 +401,11 @@ $(document).ready(() => {
     drawFiles();
     fixFileEvents();
     makeFoldersAccesible();
+    makeFilesDownloable();
     makeDroppableNavRoute();
     makeDroppableFolder();
     makeDroppableBody();
-    navButtonEvents();
+    navButtonEvents()
 });
 
 
@@ -435,15 +463,19 @@ function fixFileEvents(){
         var currentDir = new URLSearchParams(window.location.search).get("dir");
 
         if (isNull(currentDir)) currentDir = "/"; //If is null default dir is /
-    
-        if (currentDir.charAt(currentDir.length -1) != "/") 
-            currentDir = currentDir.concat("/")//Add the last slash if this not have
-        
+
+        const fixInitSlash = str => str.startsWith("/") ? str.slice(1, str.length) : str;
+        const fixEndSlash = str => str.endsWith("/") ? str : str.concat("/");
+
+        currentDir = fixInitSlash(currentDir);
+        currentDir = currentDir != "" ? fixEndSlash(currentDir) : currentDir;
+
         const bind = {
             currentDir: currentDir + fileName,
-            newDir: "/temp_bin/" + fileName
+            newDir: "temp_bin/" + fileName
         };
 
+        console.log(bind);
         moveFileRequest(bind, () => file.fadeOut(350, () => $(this).remove()))
     })
 }
