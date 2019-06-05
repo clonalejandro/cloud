@@ -45,6 +45,17 @@ html(lang="en")
         link(rel='stylesheet', href="assets/css/panel.css")
         link(rel='stylesheet', href="assets/css/menu.css")
         body
+            //Modal Room create
+            div.modal#modalNewFolder(role="dialog")
+                div.modal-dialog(role="document")
+                    div.modal-content
+                        div.modal-body
+                            form(onsubmit="processCreateFolder()")
+                                div.form-group
+                                    input.form-control(placeholder="Folder name", maxlength=32, name="folder", required)
+                                button.left.btn.btn-success(type="submit") Ok!
+                                button.right.btn.btn-danger(data-dismiss="modal") Cancel
+
             div#drop.hide
                 button.btn.btn-danger#close
                     i.fa.fa-times
@@ -58,7 +69,9 @@ html(lang="en")
                                 input(type='file', name="files", multiple)
                                 strong.def Choose a file 
                                 span.def or drag it here.
-                                span.nodef.hide Done!
+                                span.nodef.hide Done! 
+                                    br 
+                                    | If you want you can upload more files
                             div.container.prog.hide
                                 h4 Uploading... 
                                     span.percent 0%
@@ -91,7 +104,7 @@ html(lang="en")
                                         i.fa.fa-users
                                         |  Shared with others 
                         li
-                            a(href="#")
+                            a(href="/?dir=/temp_bin")
                                 i.fa.fa-trash
                                 |  Bin
                     ul.list-unstyled.CTAs

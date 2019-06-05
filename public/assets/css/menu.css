@@ -153,20 +153,6 @@ li.dropdown:hover > a > i {
     -webkit-transition: all 0.2s ease-out
 }
 
-::placeholder {
-    color: white!important
-}
-
-input:-webkit-autofill,
-input:-webkit-autofill:hover, 
-input:-webkit-autofill:focus, 
-input:-webkit-autofill:active,
-input:-internal-autofill-selected {
-    background: transparent!important;
-    transition: background-color 5000s ease-in-out 0s!important;
-    -webkit-text-fill-color: #fff !important
-}
-
 
 /** AUTOCOMPLETE **/
 

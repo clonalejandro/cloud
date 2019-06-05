@@ -4,6 +4,8 @@ String.prototype.replaceAll = function(charToReplace, newChar){
     return str
 };
 
+var openSettings = false;
+
 
 /** FUNCTIONS **/
 
@@ -62,6 +64,7 @@ function deserailizeDirFromUrl(){
 function makeFoldersAccesible(){
     $(".file-folder").each(index => {
         const folder = $($(".file-folder")[index]).parent();
+
         var currentDir = new URLSearchParams(window.location.search).get("dir");
 
         if (isNull(currentDir)) currentDir = "/"; //If is null default dir is /
@@ -69,7 +72,12 @@ function makeFoldersAccesible(){
         if (currentDir.charAt(currentDir.length -1) != "/") 
             currentDir = currentDir.concat("/")//Add the last slash if this not have
     
-        folder.on('click', () => redirect(`${webURI}/?dir=${currentDir}${encodeURI(folder.find("span").text())}`))
+        folder.on('click', () => {
+            if (!openSettings)
+                redirect(`${webURI}/?dir=${currentDir}${encodeURI(
+                    folder.find("span").text()
+                )}`)
+        })
     })
 }
 
@@ -108,20 +116,16 @@ function makeNavActionButton(){
                 <i class="fa fa-plus"></i>
             </a>
             <div class="dropdown-menu" aria-labelledby="fileSubmenu">
-                <a id="newFile" href="#" class="dropdown-item">
-                    <i class="fa fa-file"></i>
-                     New file
-                </a>
-                <a id="newFolder" href="#" class="dropdown-item">
+                <a id="newFolder" class="dropdown-item">
                     <i class="fa fa-folder"></i>
                      New folder
                 </a>
-                <a id="uploadFile" href="#" class="dropdown-item">
+                <a id="uploadFile" class="dropdown-item">
                     <i class="fa fa-upload"></i>
                      Upload file
                 </a>
             </div>
-    `);
+    `)
 }
 
 
@@ -233,9 +237,23 @@ function drawFiles(){
                     isNull(resolveFileExtension(file)) ? "folder" : resolveFileExtension(file)
                 }"><br>
                 <span class="badge badge-secondary">${file}</span>
-                <a class="settings">
+                <a class="settings dropdown-toggle" id="settingsSubmenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fa fa-ellipsis-v"></i>
                 </a>
+                <div id="settingsSubmenu" class="dropdown-menu settingsSubmenu" aria-labelledby="settingsSubmenu">
+                    <a class="dropdown-item share">
+                        <i class="fa fa-share-alt"></i>
+                        Share
+                    </a>
+                    <a class="dropdown-item unshare">
+                        <i class="fa fa-undo"></i> 
+                        Unshare
+                    </a>
+                    <a class="dropdown-item delete">
+                        <i class="fa fa-trash"></i>  
+                        Delete
+                    </a>
+                </div>
             </div>
         `);
     });
@@ -244,13 +262,43 @@ function drawFiles(){
 }
 
 
+/**
+ * This function creates a folder when submit the modal newFolder
+ */
+function processCreateFolder(){
+    const input = $("#modalNewFolder form input[name='folder']")
+    const dir = new URLSearchParams(window.location.search).get("dir");
+
+    const fixInitSlash = str => str.startsWith("/") ? str.slice(1, str.length) : str;
+    const fixEndSlash = str => str.endsWith("/") ? str : str.concat("/");
+
+    const bind = {
+        folder: fixEndSlash(fixInitSlash(isNull(dir) ? "/" : dir)) + input.val()
+    };
+
+    createFolderRequest(bind, () => $("#modalNewFolder").fadeOut(350, () => {
+        $("#modalNewFolder").modal('show');
+        redirect(window.location.href)
+    }))
+}
+
+
 /** REQUESTS **/
 
 function moveFileRequest(bind, callback){
     new Request(`${webURI}/api/move-file-to-folder?currentDir=${bind.currentDir}&newDir=${bind.newDir}`, "GET", e => {
-        if (e.status == 200 || e.responseText == "Ok!") callback();
-        else throwErr(e.responseText);
+        if (e.status == 200 || e.responseText == "Ok!") callback()
+        else throwErr(e.responseText)
     }, `currentDir=${bind.currentDir}&newDir=${bind.newDir}`)
+}
+
+
+function createFolderRequest(bind, callback){
+    new Request(`${webURI}/api/create-folder?folder=${bind.folder}`, "GET", e => {
+        console.log(e);
+        if (e.status == 200 || e.responseText == "Ok!") callback();
+        else throwErr(e.responseText)
+    }, `folder=${bind.folder}`)
 }
 
 
@@ -304,6 +352,7 @@ function uploadFilesRequest(files){
             $(".def").addClass("hide");
             $(".nodef").removeClass("hide");
 
+            $("#drop .prog").addClass("hide");
             $("#drop .prog .percent").html("0%");
             
             $bar.css({width: 0});
@@ -323,6 +372,7 @@ $(document).ready(() => {
     makeNavRouter();
     makeNavActionButton();
     drawFiles();
+    fixFileEvents();
     makeFoldersAccesible();
     makeDroppableNavRoute();
     makeDroppableFolder();
@@ -361,9 +411,39 @@ $(".btn#back").on('click', () => {
     redirect(uri);
 });
 
+$("#modalNewFolder form").on('submit', e => e.preventDefault());
+
+
 function navButtonEvents(){
     $("#uploadFile").on('click', () => {
         $("#wrapper").addClass("dragOn");
-        $("#drop").fadeIn(350, () => $(this).removeClass("hide"))
+        $("#drop").fadeIn(350, () => $(this).removeClass("hide"));
     });
+
+    $("#newFolder").on('click', () => $("#modalNewFolder").modal('show'))
+}
+
+function fixFileEvents(){
+    $(".settings").on('click', e => {
+        openSettings = true;//Set true for stop click event file
+        setTimeout(() => openSettings = false, 200)//Set false for enable click event file
+    });
+
+    $("#settingsSubmenu .delete").on('click', e => {
+        const file = $(e.target).parent().parent();
+        const fileName = file.find("span").text();
+        var currentDir = new URLSearchParams(window.location.search).get("dir");
+
+        if (isNull(currentDir)) currentDir = "/"; //If is null default dir is /
+    
+        if (currentDir.charAt(currentDir.length -1) != "/") 
+            currentDir = currentDir.concat("/")//Add the last slash if this not have
+        
+        const bind = {
+            currentDir: currentDir + fileName,
+            newDir: "/temp_bin/" + fileName
+        };
+
+        moveFileRequest(bind, () => file.fadeOut(350, () => $(this).remove()))
+    })
 }

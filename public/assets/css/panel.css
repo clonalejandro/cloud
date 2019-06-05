@@ -28,6 +28,14 @@ html {
 }
 
 
+.right {
+    float: right
+}
+
+.left {
+    float: left
+}
+
 /** DROP **/
 
 #wrapper.dragOn {
@@ -65,7 +73,6 @@ html {
     text-align: center;
     height: 50%;
     width: 60%;
-    margin-top: 10%;
     border: 2px dashed rgba(255, 255, 255, .7)
 }
 
@@ -90,8 +97,11 @@ html {
     cursor: pointer
 }
 
+#drop #footer {
+    margin-bottom: 5%
+}
+
 #drop .prog {
-    margin-top: 5%;
     margin-bottom: 5%
 }
 
@@ -173,6 +183,10 @@ html {
     position: relative;
     opacity: .7;
     z-index: -1
+}
+
+.file .dropdown-toggle::after {
+    display: none
 }
 
 .file img {

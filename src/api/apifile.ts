@@ -39,6 +39,8 @@ export default class ApiFile {
         try {
             if (!fs.existsSync(target)){
                 fs.mkdirSync(target);
+                fs.mkdirSync(target + "/temp_bin");
+                
                 this.App.debug(`Creating a user folder called ${username}`)
             }
             else this.App.throwErr({message: "The user folder was not created"}, this.props.prefix)
@@ -66,6 +68,26 @@ export default class ApiFile {
 
 
     /**
+     * This function creates a folder in the user directory
+     * @param {String} username 
+     * @param {String} folder 
+     * @param {*} callback 
+     */
+    public createFolder(username: string, folder: string, callback: any): void {
+        const dir = `${this.props.folderPath}/${username}/${folder}`;
+
+        try {
+            if (!fs.existsSync(dir))
+                fs.mkdir(dir, err => callback(err))
+            else callback({message: "This file/folder al ready exists with this name"})
+        }
+        catch (err){
+            callback(err)
+        }
+    }
+
+
+    /**
      * This function move file to other folder
      * @param {String} username 
      * @param {String} currentDir 
@@ -87,6 +109,26 @@ export default class ApiFile {
     }
 
 
+    /**
+     * This function deletes a file
+     * @param {String} username 
+     * @param {String} folder 
+     * @param {*} callback
+     */
+    public deleteFile(username: string, folder: string, callback: any): void {
+        const dir = `${this.props.folderPath}/${username}/${folder}`;
+
+        try {
+            if (fs.existsSync(dir))
+                fs.rmdirSync(dir)
+            else callback({message: "This file/folder not exists!"})
+        }
+        catch (err){
+            callback(err)
+        }
+    }
+
+
     /** OTHERS **/
 
     /**
@@ -94,7 +136,8 @@ export default class ApiFile {
      */
     private register(): void {
         this.moveFileToFolderRest();
-        
+        this.createFolderRest();
+
         this.App.debug("Registering all apiuser routes", this.props.prefix)
     }
 
@@ -105,7 +148,7 @@ export default class ApiFile {
     private init(): void {
         if (!fs.existsSync(this.props.folderPath)){
             fs.mkdirSync(this.props.folderPath);
-            this.App.debug("Creating data folder", this.props.prefix)
+            this.App.debug("Creating data folder", this.props.prefix);
         }
     }
 
@@ -114,7 +157,7 @@ export default class ApiFile {
      * This function move file via api
      * Requeriments: (username, currentDir, newDir)
      */
-    private moveFileToFolderRest(){
+    private moveFileToFolderRest(): void {
         this.server.get('/api/move-file-to-folder', (req: any, res: any) => {
             try {
                 const bind = {
@@ -124,7 +167,31 @@ export default class ApiFile {
                 };
 
                 this.moveFileToFolder(bind.username, bind.currentDir, bind.newDir, (err: any) => {
-                    if (err) this.App.throwErr(err, this.props.prefix, res);
+                    if (err) this.App.throwErr(err, this.props.prefix, res)
+                    else res.status(200).send("Ok!")
+                })
+            }
+            catch (err){
+                this.App.throwErr(err, this.props.prefix, res)
+            }
+        })
+    }
+
+
+    /**
+     * This function creates a folder via api
+     * Requeriments: (username, folder)
+     */
+    private createFolderRest(): void {
+        this.server.get('/api/create-folder', (req: any, res: any) => {
+            try {
+                const bind = {
+                    username: req.user.username,
+                    folder: this.App.replaceAll(req.query.folder, "..", "")
+                };
+
+                this.createFolder(bind.username, bind.folder, (err: any) => {
+                    if (err) this.App.throwErr(err, this.props.prefix, res)
                     else res.status(200).send("Ok!")
                 })
             }
