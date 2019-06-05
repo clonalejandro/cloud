@@ -10,9 +10,7 @@
     "webURI": "http://192.168.0.46",
     "blob": {
         "abortOnLimit": true,
-        "limits": {
-            "fileSize": 52428800
-        }
+        "responseOnLimit": "File size limit has been reached"
     },
     "session": {
         "secret": "54321A",
@@ -26,6 +24,7 @@
         "uri": "mongodb://localhost:27017/cloud"
     },
     "bannedFiles": [
-        ".DS_Store"
+        ".DS_Store",
+        "temp_bin"
     ]
 }
