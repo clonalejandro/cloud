@@ -1,6 +1,7 @@
 /** IMPORTS **/
 
 import fs from 'fs';
+import fsExtra from 'fs-extra';
 
 
 export default class ApiFile {
@@ -58,11 +59,23 @@ export default class ApiFile {
      */
     public getContentFolder(name: string): string[] {
         try {
-            return this.filterFiles(fs.readdirSync(`${this.props.folderPath}/${name}`))//TODO: check if file is folder for improve the file render system in the panel.js
+            const dir = `${this.props.folderPath}/${name}`;
+
+            if (fs.existsSync(dir)){
+                const files = this.filterFiles(fs.readdirSync(dir))//TODO: check if file is folder for improve the file render system in the panel.js
+                const res = new Array();
+
+                files.forEach(file => res.push({
+                    name: file,
+                    type: fs.statSync(`${dir}/${file}`).isDirectory() ? "folder" : "file"
+                }));
+
+                return res
+            }
+            else return this.App.throwErr({message: `The folder ${name} not exists`}, this.props.prefix);
         } 
         catch (err){
-            this.App.throwErr(err, this.props.prefix)
-            return []
+            return this.App.throwErr(err, this.props.prefix)
         }
     }
 
@@ -79,7 +92,7 @@ export default class ApiFile {
         try {
             if (!fs.existsSync(dir))
                 fs.mkdir(dir, err => callback(err))
-            else callback({message: "This file/folder al ready exists with this name"})
+            else callback({message: "This file/folder already exists with this name"})
         }
         catch (err){
             callback(err)
@@ -99,9 +112,13 @@ export default class ApiFile {
         const neu: string = `${this.props.folderPath}/${username}/${newDir}`;
 
         try {
-            if (!fs.existsSync(neu) || neu == currentDir)
-                fs.rename(current, neu, callback)
-            else callback({message: "This file/folder al ready exists with this name"})
+            if (fs.existsSync(`${this.props.folderPath}/${username}`))
+                if (fs.existsSync(`${this.props.folderPath}/${username}/temp_bin`))
+                    if (!fs.existsSync(neu) || neu == currentDir)
+                        fs.rename(current, neu, callback)
+                    else callback({message: "This file/folder already exists with this name"})
+                else callback({message: "The user bin not exists, please contact with an a administrator"})
+            else callback({message: "The user folder not exists, please contact with an a administrator"})
         }
         catch (err){
             callback(err)
@@ -115,12 +132,12 @@ export default class ApiFile {
      * @param {String} folder 
      * @param {*} callback
      */
-    public deleteFile(username: string, folder: string, callback: any): void {
-        const dir = `${this.props.folderPath}/${username}/${folder}`;
+    public deleteFile(username: string, file: string, callback: any): void {
+        const dir = `${this.props.folderPath}/${username}/temp_bin/${file}`;
 
         try {
             if (fs.existsSync(dir))
-                fs.rmdirSync(dir)
+                fsExtra.remove(dir, callback)
             else callback({message: "This file/folder not exists!"})
         }
         catch (err){
@@ -137,7 +154,8 @@ export default class ApiFile {
     private register(): void {
         this.moveFileToFolderRest();
         this.createFolderRest();
-        this.downloadFile();
+        this.downloadFileRest();
+        this.deleteFileRest();
 
         this.App.debug("Registering all apiuser routes", this.props.prefix)
     }
@@ -207,7 +225,7 @@ export default class ApiFile {
      * This function send file via api
      * Requeriments: (username, file)
      */
-    private downloadFile(){
+    private downloadFileRest(){
         this.server.get('/api/download-file', (req: any, res: any) => {
             try {
                 const bind = {
@@ -216,6 +234,30 @@ export default class ApiFile {
                 };
 
                 res.download(`${this.props.folderPath}/${bind.username}/${bind.file}`)
+            }
+            catch (err){
+                this.App.throwErr(err, this.props.prefix, res)
+            }
+        })
+    }
+
+
+    /**
+     * This function deletes a file via api
+     * Requeriments: (username, file)
+     */
+    private deleteFileRest(){
+        this.server.get('/api/delete-file', (req: any, res: any) => {
+            try {
+                const bind = {
+                    username: req.user.username,
+                    file: req.query.file
+                };
+
+                this.deleteFile(bind.username, bind.file, (err: any) => {
+                    if (err) return this.App.throwErr(err, this.props.prefix, res)
+                    res.status(200).send("Ok!")
+                })
             }
             catch (err){
                 this.App.throwErr(err, this.props.prefix, res)

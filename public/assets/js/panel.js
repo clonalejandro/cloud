@@ -1,3 +1,5 @@
+/** MAIN **/
+
 String.prototype.replaceAll = function(charToReplace, newChar){
     let str = this;
     while (str.includes(charToReplace)) str = str.replace(charToReplace, newChar);
@@ -5,6 +7,8 @@ String.prototype.replaceAll = function(charToReplace, newChar){
 };
 
 var openSettings = false;
+
+const enableNavFolder = () => setTimeout(() => openSettings = false, 200)//Set false for enable click event file
 
 
 /** FUNCTIONS **/
@@ -97,7 +101,6 @@ function makeFilesDownloable(){
         if (currentDir.charAt(currentDir.length -1) != "/") 
             currentDir = currentDir.concat("/")//Add the last slash if this not have
         
-        console.log(currentDir + file.find("span").text());
         target.attr("href", `${webURI}/api/download-file/?file=${currentDir}${encodeURI(
             file.find("span").text()
         )}`)
@@ -118,7 +121,7 @@ function makeNavRouter(html = undefined){
         dirs.forEach(row => {
             makeNavRouter(`
                 <a class="nav-link route" href="/?dir=${encodeURI(row.fullPath)}" data-dir="${row.fullPath}">
-                    <strong>${row.name}</strong>
+                    <strong>${row.name == "temp_bin" ? "<i class='fa fa-trash'></i>" : row.name}</strong>
                 </a>
                 <a class="prompt">
                     <i class="fa fa-angle-right nav-icon"></i>
@@ -188,6 +191,7 @@ function makeDroppableFolder(){
 
             moveFileRequest(bind, () => {
                 $(ui.draggable).remove();
+                enableNavFolder();
                 console.log("File transfered with data: ", bind)
             })
         },
@@ -228,6 +232,7 @@ function makeDroppableNavRoute(){
 
             moveFileRequest(bind, () => {
                 $(ui.draggable).remove();
+                enableNavFolder();
                 console.log("File transfered with data: ", bind)
             })
         },
@@ -251,13 +256,15 @@ function makeDraggableFile(fileHtml){
  */
 function drawFiles(){
     $(".tempFile").each(index => {
-        const file = $($("#tempFiles p")[index]).text();
+        const temp = $($("#tempFiles p")[index]);
+        const file = temp.text();
+        const type = temp.attr("data-type")
         const filesContainer = $(".files");
 
         filesContainer.append(`
-            <div class="file" data-type="${isNull(resolveFileExtension(file)) ? "folder" : "file"}">
+            <div class="file" data-type="${type}" data-role="${file == "temp_bin" ? "bin" : "default"}">
                 <img class="file-${
-                    isNull(resolveFileExtension(file)) ? "folder" : resolveFileExtension(file)
+                    type == "folder" ? "folder" : resolveFileExtension(file)
                 }"><br>
                 <span class="badge badge-secondary">${file}</span>
                 <a class="settings dropdown-toggle" id="settingsSubmenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -310,12 +317,56 @@ function processCreateFolder(){
 }
 
 
+/**
+ * This function sets the delete action for remove the fiele for ever
+ */
+function setDeleteActionAsNotBin(){
+    var currentDir = new URLSearchParams(window.location.search).get("dir");
+
+    if (isNull(currentDir)) currentDir = "/"; //If is null default dir is /
+    if (!currentDir.includes("temp_bin")) return;
+    
+    $("#settingsSubmenu .delete").each(index => {
+        $($("#settingsSubmenu .delete")[index]).unbind().on('click', e => {
+            const file = $(e.target).parent().parent();
+            const fileName = file.find("span").text();
+    
+            const fixInitSlash = str => str.startsWith("/") ? str.slice(1, str.length) : str;
+            const fixEndSlash = str => str.endsWith("/") ? str : str.concat("/");
+    
+            currentDir = fixInitSlash(currentDir);
+            currentDir = currentDir != "" ? fixEndSlash(currentDir) : currentDir;
+            currentDir = currentDir.replace("temp_bin/", "");
+    
+            const bind = {
+                file: currentDir + fileName,
+            };
+    
+            if (isNull(bind.file)) return console.log(bind, file, fileName, file.find("span"));
+    
+            deleteFileRequest(bind, () => file.fadeOut(350, () => {
+                enableNavFolder();
+                $(this).remove()
+            }))
+        })
+    })
+}
+
+
 /** REQUESTS **/
+
+function deleteFileRequest(bind, callback){
+    new Request(`${webURI}/api/delete-file?file=${bind.file}`, "GET", e => {
+        if (e.status == 200 || e.responseText == "Ok!") callback()
+        else throwErr(e.responseText || e.statusText)
+    })
+}
+
 
 function moveFileRequest(bind, callback){
     new Request(`${webURI}/api/move-file-to-folder?currentDir=${bind.currentDir}&newDir=${bind.newDir}`, "GET", e => {
         if (e.status == 200 || e.responseText == "Ok!") callback()
-        else throwErr(e.responseText)
+        else throwErr(e.responseText || e.statusText)
     }, `currentDir=${bind.currentDir}&newDir=${bind.newDir}`)
 }
 
@@ -324,7 +375,7 @@ function createFolderRequest(bind, callback){
     new Request(`${webURI}/api/create-folder?folder=${bind.folder}`, "GET", e => {
         console.log(e);
         if (e.status == 200 || e.responseText == "Ok!") callback();
-        else throwErr(e.responseText)
+        else throwErr(e.responseText || e.statusText)
     }, `folder=${bind.folder}`)
 }
 
@@ -405,7 +456,8 @@ $(document).ready(() => {
     makeDroppableNavRoute();
     makeDroppableFolder();
     makeDroppableBody();
-    navButtonEvents()
+    navButtonEvents();
+    setDeleteActionAsNotBin()
 });
 
 
@@ -452,30 +504,33 @@ function navButtonEvents(){
 }
 
 function fixFileEvents(){
-    $(".settings").on('click', e => {
-        openSettings = true;//Set true for stop click event file
-        setTimeout(() => openSettings = false, 200)//Set false for enable click event file
-    });
+    $(".settings").on('click', e => openSettings = true);//Set true for stop click event file
+    
+    $("#settingsSubmenu .delete").on('click', e => enableNavFolder());
+    $("#settingsSubmenu .download").on('click', e => enableNavFolder());
+    $("#settingsSubmenu .unshare").on('click', e => enableNavFolder());
+    $("#settingsSubmenu .share").on('click', e => enableNavFolder());
 
-    $("#settingsSubmenu .delete").on('click', e => {
-        const file = $(e.target).parent().parent();
-        const fileName = file.find("span").text();
-        var currentDir = new URLSearchParams(window.location.search).get("dir");
-
-        if (isNull(currentDir)) currentDir = "/"; //If is null default dir is /
-
-        const fixInitSlash = str => str.startsWith("/") ? str.slice(1, str.length) : str;
-        const fixEndSlash = str => str.endsWith("/") ? str : str.concat("/");
-
-        currentDir = fixInitSlash(currentDir);
-        currentDir = currentDir != "" ? fixEndSlash(currentDir) : currentDir;
-
-        const bind = {
-            currentDir: currentDir + fileName,
-            newDir: "temp_bin/" + fileName
-        };
-
-        console.log(bind);
-        moveFileRequest(bind, () => file.fadeOut(350, () => $(this).remove()))
+    $("#settingsSubmenu .delete").each(index => {
+        $($("#settingsSubmenu .delete")[index]).on('click', e => {
+            const file = $(e.target).parent().parent();
+            const fileName = file.find("span").text();
+            var currentDir = new URLSearchParams(window.location.search).get("dir");
+    
+            if (isNull(currentDir)) currentDir = "/"; //If is null default dir is /
+    
+            const fixInitSlash = str => str.startsWith("/") ? str.slice(1, str.length) : str;
+            const fixEndSlash = str => str.endsWith("/") ? str : str.concat("/");
+    
+            currentDir = fixInitSlash(currentDir);
+            currentDir = currentDir != "" ? fixEndSlash(currentDir) : currentDir;
+    
+            const bind = {
+                currentDir: currentDir + fileName,
+                newDir: "temp_bin/" + fileName
+            };
+    
+            moveFileRequest(bind, () => file.fadeOut(350, () => $(this).remove()))
+        })
     })
 }
