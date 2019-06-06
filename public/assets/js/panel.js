@@ -503,7 +503,7 @@ function fixFileEvents(){
     $(".settings").on('click', e => openSettings = true);//Set true for stop click event file
     
     $('#settingsSubmenu.dropdown-menu').each(i => $($('#settingsSubmenu.dropdown-menu')[i])
-        .parent().on('hide.bs.dropdown', e =>enableNavFolder()
+        .parent().on('hide.bs.dropdown', e => enableNavFolder()
     ));
 
     $("#settingsSubmenu .delete").each(index => {
