@@ -267,11 +267,11 @@ function drawFiles(){
                     type == "folder" ? "folder" : resolveFileExtension(file)
                 }"><br>
                 <span class="badge badge-secondary">${file}</span>
-                <a class="settings dropdown-toggle" id="settingsSubmenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="settings dropdown-toggle" id="settingsSubmenu" data-toggle="dropdown">
                     <i class="fa fa-ellipsis-v"></i>
                 </a>
-                <div id="settingsSubmenu" class="dropdown-menu" aria-labelledby="settingsSubmenu">
-                    <a class="dropdown-item download" download>
+                <div id="settingsSubmenu" role="menu" class="dropdown-menu settingsSubmenu" aria-labelledby="settingsSubmenu">
+                    <a class="dropdown-item ${type == "folder" ? "hide" : ""} download" download>
                         <i class="fa fa-download"></i>
                         Download
                     </a>
@@ -310,10 +310,9 @@ function processCreateFolder(){
         folder: fixEndSlash(fixInitSlash(isNull(dir) ? "/" : dir)) + input.val()
     };
 
-    createFolderRequest(bind, () => $("#modalNewFolder").fadeOut(350, () => {
-        $("#modalNewFolder").modal('show');
-        redirect(window.location.href)
-    }))
+    $("#modalNewFolder").fadeOut(350, () => $("#modalNewFolder").modal('hide'));
+
+    createFolderRequest(bind, () =>  redirect(window.location.href));
 }
 
 
@@ -344,10 +343,7 @@ function setDeleteActionAsNotBin(){
     
             if (isNull(bind.file)) return console.log(bind, file, fileName, file.find("span"));
     
-            deleteFileRequest(bind, () => file.fadeOut(350, () => {
-                enableNavFolder();
-                $(this).remove()
-            }))
+            deleteFileRequest(bind, () => file.fadeOut(350, () => $(this).remove()))
         })
     })
 }
@@ -506,10 +502,9 @@ function navButtonEvents(){
 function fixFileEvents(){
     $(".settings").on('click', e => openSettings = true);//Set true for stop click event file
     
-    $("#settingsSubmenu .delete").on('click', e => enableNavFolder());
-    $("#settingsSubmenu .download").on('click', e => enableNavFolder());
-    $("#settingsSubmenu .unshare").on('click', e => enableNavFolder());
-    $("#settingsSubmenu .share").on('click', e => enableNavFolder());
+    $('#settingsSubmenu.dropdown-menu').each(i => $($('#settingsSubmenu.dropdown-menu')[i])
+        .parent().on('hide.bs.dropdown', e =>enableNavFolder()
+    ));
 
     $("#settingsSubmenu .delete").each(index => {
         $($("#settingsSubmenu .delete")[index]).on('click', e => {

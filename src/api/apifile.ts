@@ -62,7 +62,7 @@ export default class ApiFile {
             const dir = `${this.props.folderPath}/${name}`;
 
             if (fs.existsSync(dir)){
-                const files = this.filterFiles(fs.readdirSync(dir))//TODO: check if file is folder for improve the file render system in the panel.js
+                const files = this.filterFiles(fs.readdirSync(dir))
                 const res = new Array();
 
                 files.forEach(file => res.push({
