@@ -59,7 +59,6 @@ export default class Router {
     private renderMainRoutes(): void {
         Object.keys(this.App.routes).forEach(url => {
             const view = this.App.routes[url];
-            
             this.server.get(url, (req: Request, res: Response) => {
                 try {
                     res.render(view, this.tempConfig)

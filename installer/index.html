@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Installation - ClonCloud</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="lib/tagsinput.css">
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+    <body>
+        <div id="wrapper">
+            <div class="container" id="main">
+                <header>
+                    <div id="head">
+                        <img src="https://i.imgur.com/Qe7LEJp.png" width="64px" height="64px">
+                        <h3>Installation - ClonCloud</h3>
+                    </div>
+                    <br>
+                    <div id="progress">
+                        <h4>Proccess 1/5</h4>
+                    </div>
+                    <br>
+                </header>
+                <div id="content" class="container">
+                    <form onsubmit="return false">
+                        <div class="form-check hidden">
+                            <input class="form-check-input" name="debug" type="checkbox" id="debug">
+                            <label class="form-check-label" for="debug">Debug Mode</label>
+                        </div>
+                        <div class="form-group hidden">
+                            <label for="port">Service port</label>
+                            <input class="form-control" name="port" type="number" placeholder="3001">
+                        </div>
+                        <div class="form-group hidden">
+                            <label for="apiKey">Api secret key</label>
+                            <input class="form-control" name="apiKey" placeholder="54321A">
+                        </div>
+                        <div class="form-group hidden">
+                            <label for="logo">Logo url</label>
+                            <input class="form-control" name="logo" type="url">
+                        </div>
+                        <!-- TODO: DIVIDES -->
+                        <div class="form-group hidden">
+                            <label for="webName">Web name</label>
+                            <input class="form-control" name="webName" placeholder="Cloud">
+                        </div>
+                        <div class="form-group hidden">
+                            <label for="description">Web description</label>
+                            <input class="form-control" name="description" placeholder="Developed by clonalejandro">
+                        </div>
+                        <div class="form-group hidden">
+                            <label for="tagsString">Web tags</label>
+                            <input data-role="tagsinput" class="form-control" name="tagsString" value="js, node, typescript, fullstack">
+                        </div>
+                        <div class="form-group hidden">
+                            <label for="email">Web mail</label>
+                            <input class="form-control" name="email" placeholder="master@yourdomain.com">
+                        </div>
+                        <!-- TODO: DIVIDES -->
+                        <div class="form-group hidden">
+                            <label for="webURI">Web domain</label>
+                            <input class="form-control" name="webURI" placeholder="cloud.clonalejandro.io">
+                        </div>
+                        <div class="form-check hidden">
+                            <input class="form-check-input" type="checkbox" name="abortOnLimit">
+                            <label class="form-check-label" for="abortOnLimit">Blob abort on limit</label>
+                        </div>
+                        <div class="form-group hidden">
+                            <label for="responseOnLimit">Text on limit</label>
+                            <input class="form-control" name="responseOnLimit" placeholder="File size limit has been reached">
+                        </div>
+                        <div class="form-group hidden">
+                            <label for="mongo">Database url</label>
+                            <input class="form-control" name="mongo" placeholder="mongodb://localhost:27017/cloud">
+                        </div>   
+                        <div id="submiter">
+                            <button type="submit" class="btn btn-info">Next</button>
+                        </div>     
+                    </form>
+                </div>
+            </div>
+        </div>
+    <!-- SCRIPTS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="lib/tagsinput.js"></script>
+    <script src="js/installer.js"></script>
+    </body>
+</html>

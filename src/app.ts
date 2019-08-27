@@ -28,6 +28,7 @@ export default class App {
     public server: express.Application
     
     private log: Log;
+    private context: string;
 
     private static log: Log;
 
@@ -37,12 +38,15 @@ export default class App {
     public static routes = routes;
     public static tasks = [{name: "", callback: ""}];
     
-    public constructor(server: express.Application){
+    public constructor(server: express.Application, context: string){
         this.server = server;
+        this.context = context;
         this.log = new Log();
 
         App.log = this.log;
-        App.mongo = new Mongo(App);
+
+        if (context == "DEFAULT")
+            App.mongo = new Mongo(App);
     }
 
 
@@ -134,13 +138,17 @@ export default class App {
      * This function starts the server
      */
     public start(): void {
-        this.server.use('/assets', express.static(`${ __dirname}/../../public/assets/`, config.session.cookie));
-        this.server.set('views', 'views');
-        this.server.set('view engine', 'pug');
+        if (this.context == "DEFAULT"){
+            this.server.use('/assets', express.static(`${ __dirname}/../../public/assets/`, config.session.cookie));
+            this.server.set('views', 'views');
+            this.server.set('view engine', 'pug');
 
-        this.server.listen(config.port, () => {
-            App.debug(`Starting cloud server listen port: ${config.port}  🎨`)
-        })
+            this.server.listen(config.port, () => App.debug(`Starting cloud server listen port: ${config.port}  🎨`))
+        }
+        else {
+            this.server.use(express.static(`${ __dirname}/../../installer/`));
+            this.server.listen(3001, () => App.debug("Starting server in installation mode in 3001 port 💣"))
+        }
     }
 
     
@@ -149,7 +157,8 @@ export default class App {
      * @param {*} passport
      */
     public prepareRoutes(passport: any): void {
-        new Router(App, this.server, passport).register()
+        if (this.context === "DEFAULT")
+            new Router(App, this.server, passport).register()
     }
 
 
@@ -157,7 +166,8 @@ export default class App {
      * This function starts the Api
      */
     public startApi(): void {
-        App.Api = new Api(App, this.server);
+        if (this.context == "DEFAULT")
+            App.Api = new Api(App, this.server);
     }
 
 

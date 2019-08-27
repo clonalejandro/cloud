@@ -1,6 +1,7 @@
 /** IMPORTS **/
 
 import fs from 'fs';
+import App from '../app';
 import Math from './math';
 
 
@@ -49,10 +50,13 @@ export default class Log {
     /**
      * This function creates a log
      */
-    private create(): void {
+    private create(callback: any = undefined): void {
         fs.writeFile(this.logDir + this.name, `//This log was created at ${new Date()}`, err => {
             if (err) throw err;
-            else console.log(`New log started wich name is ${this.name}`)
+            else {
+                if (callback != undefined) callback();
+                App.debug(`New log started wich name is ${this.name}`, "LOGS")
+            }
         })
     }
 
@@ -89,10 +93,11 @@ export default class Log {
             const newName = createLogName();
             const lastName = this.name;
 
-            this.write(`\nRotating this log to: "${newName}"`);
+            this.write(`\n//Rotating this log to: "${newName}"`);
 
-            this.create();
-            this.write(`Log rotated from: ${lastName}`)
+            this.name = newName;//Reasign the newname in the log properties
+
+            this.create(() => this.write(`\n//Log rotated from: ${lastName}`))
         }
     }
 }
