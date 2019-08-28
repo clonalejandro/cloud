@@ -72,4 +72,14 @@ export default class ApiConfig {
             fsExtra.removeSync(this.props.filePath);
         fs.writeFile(this.props.filePath, content, callback)
     }
+
+
+    /**
+     * This function deletes a config file
+     */
+    private deleteConfig(): void {
+        fsExtra.removeSync(this.props.filePath);
+    }
+
+    
 }
