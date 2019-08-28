@@ -15,6 +15,7 @@ import Auth from './utils/auth';
 import User from './orms/user';
 
 import Api from './api/api';
+import ApiConfig from './api/apiconfig';
 
 import config from '../assets/data/config.json';
 import routes from '../assets/data/routes.json';
@@ -158,7 +159,10 @@ export default class App {
      */
     public prepareRoutes(passport: any): void {
         if (this.context === "DEFAULT")
-            new Router(App, this.server, passport).register()
+            new Router(App, this.server, passport).register();
+        else {
+            new ApiConfig(App, this.server);
+        }
     }
 
 

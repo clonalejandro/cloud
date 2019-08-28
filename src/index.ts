@@ -9,6 +9,8 @@ import bodyParser from 'body-parser';
 import session from 'express-session';
 import passport from 'passport';
 
+import config from '../assets/data/config.json';
+
 const Context = {
     INSTALLATION: "INSTALLATION", 
     DEFAULT: "DEFAULT"
@@ -17,8 +19,7 @@ const Context = {
 
 /** MAIN VARS **/
 
-const forceInstall = true;
-const context = fs.existsSync(`${__dirname}/../assets/data/config.json`) && !forceInstall ? Context.DEFAULT : Context.INSTALLATION;
+const context = fs.existsSync(`${__dirname}/../assets/data/config.json`) && config.installed ? Context.DEFAULT : Context.INSTALLATION;
 const server = express();
 const app = new App(server, context);
 

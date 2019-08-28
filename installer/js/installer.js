@@ -109,9 +109,13 @@ $("form").on('submit', e => {
         case 3:
             binds.push({
                 webURI: $getInput("webURI").val(),
-                abortOnLimit: $getInput("abortOnLimit").prop("checked"),
-                responseOnLimit: $getInput("responseOnLimit").val(),
-                mongo: $getInput("mongo").val()
+                blob: {
+                    abortOnLimit: $getInput("abortOnLimit").prop("checked"),
+                    responseOnLimit: $getInput("responseOnLimit").val()
+                },
+                database: {
+                    uri: $getInput("mongo").val()
+                }
             });
 
             setStep(5);
@@ -119,11 +123,35 @@ $("form").on('submit', e => {
             $("form button").text("Install");
             break
         case 4:
-            const result = {};
-            binds.forEach(obj => Object.assign(result, obj));
-            //Merge all data to json object
-            
-            console.log(result);
+            const res = {
+                installed: true,
+                session: {
+                    secret: generatePassword(),
+                    resave: false,
+                    saveUninitialized: false,
+                    cookie: {
+                        maxAge: 2592000000
+                    }
+                },
+                bannedFiles: [
+                    ".DS_Store",
+                    "temp_bin" 
+                ]
+            };
+
+            const webURI = window.location.href;
+
+            $("form button").text("Installing...");
+
+            binds.forEach(obj => Object.assign(res, obj));//Merge all data to json object
+
+            new Request(`${webURI}api/create-config?res=${JSON.stringify(res)}`, "POST", e => {
+                if (e.status == 200 || e.responseText == "Ok!"){
+                    $("form button").text("Installed!");
+                    //TODO: prints green tick
+                }
+                else alert(e.responseText || e.statusText)
+            }, `res=${JSON.stringify(res)}`);
             break
     }
 
