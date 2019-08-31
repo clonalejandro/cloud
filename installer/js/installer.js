@@ -80,7 +80,7 @@ $("form").on('submit', e => {
         default:
             binds.push({
                 debug: $getInput("debug").prop("checked"),
-                port: $getInput("port").val(),
+                port: parseInt($getInput("port").val()),
                 apiKey: $getInput("apiKey").val(),
                 logo: $getInput("logo").val()
             });

@@ -1,31 +1,24 @@
 {
     "installed": false,
-    "debug": true,
-    "port": 3001,
-    "apiKey": "54321A",
-    "logo": "https://s.gravatar.com/avatar/549430497442fc376ed2ffaa53fc6877",
-    "webName": "cloncloud",
-    "description": "A cloud system with typescript",
-    "tagsString": "cloud, typescript, js, system",
-    "email": "master@yourdomain.com",
-    "webURI": "http://192.168.0.46",
-    "blob": {
-        "abortOnLimit": true,
-        "responseOnLimit": "File size limit has been reached"
-    },
     "session": {
-        "secret": "54321A",
+        "secret": "wowEbckB",
         "resave": false,
         "saveUninitialized": false,
         "cookie": {
             "maxAge": 2592000000
         }
     },
-    "database": {
-        "uri": "mongodb://localhost:27017/cloud"
-    },
     "bannedFiles": [
         ".DS_Store",
         "temp_bin"
-    ]
-}
+    ],
+    "debug": true,
+    "port": 3001,
+    "apiKey": "54321A",
+    "logo": "https://s.gravatar.com/avatar/549430497442fc376ed2ffaa53fc6877",
+    "webName": "Cloud",
+    "description": "A cloud system with typescript",
+    "tagsString": "js, node, typescript, fullstack,typescript,ts,cloud,system",
+    "email": "master@yourdomain.com",
+    "webURI":"http://192.168.0.46", 
+    "blob":{"abortOnLimit":true,"responseOnLimit":"File size limit"},"database":{"uri":"mongodb://localhost:27017/cloud"}}

@@ -51,7 +51,8 @@ export default class ApiConfig {
                     if (err) this.App.throwErr(err, this.props.debug);
                     else {
                         res.status(200).send("Ok!");
-                        this.App.debug("Config created", this.props.prefix)
+                        this.App.debug("Config created!, restart your node server", this.props.prefix);
+                        process.exit(0)
                     }
                 })
             }
