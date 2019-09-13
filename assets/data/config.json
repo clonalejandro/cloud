@@ -20,5 +20,12 @@
     "description": "A cloud system with typescript",
     "tagsString": "js, node, typescript, fullstack,typescript,ts,cloud,system",
     "email": "master@yourdomain.com",
-    "webURI":"http://192.168.0.46", 
-    "blob":{"abortOnLimit":true,"responseOnLimit":"File size limit"},"database":{"uri":"mongodb://localhost:27017/cloud"}}
+    "webURI": "http://192.168.0.46", 
+    "blob": {
+        "abortOnLimit": true,
+        "responseOnLimit": "File size limit"
+    },
+    "database": {
+        "uri": "mongodb://localhost:27017/cloud"
+    }
+}
