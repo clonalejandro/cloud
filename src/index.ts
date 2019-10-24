@@ -30,5 +30,5 @@ app.startLogRotate();
 app.configureServer(cookieParser, bodyParser, session, passport);
 
 app.prepareRoutes(passport);
-app.start();
-app.startApi()
+app.startApi();
+app.start()
