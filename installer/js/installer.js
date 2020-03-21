@@ -71,6 +71,17 @@ function setStep(n){
 }
 
 
+/**
+ * This function draws an installed text
+ */
+function drawInstalledButton(){
+  const html = `
+    Installed <img width='16' height='16' src="https://clonalejandro.github.io/cdn/clonaweb/check.svg">
+  `;
+  $("form button").html(html)
+}
+
+
 /** EVENTS **/
 
 $("form").on('submit', e => {
@@ -120,7 +131,7 @@ $("form").on('submit', e => {
 
             setStep(5);
             hideInputs();
-            $("form button").text("Install");
+            drawInstalledButton();
             break
         case 4:
             const res = {
