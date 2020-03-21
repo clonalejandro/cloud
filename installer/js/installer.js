@@ -131,7 +131,7 @@ $("form").on('submit', e => {
 
             setStep(5);
             hideInputs();
-            drawInstalledButton();
+            $("form button").text("Install");
             break
         case 4:
             const res = {
@@ -157,10 +157,7 @@ $("form").on('submit', e => {
             binds.forEach(obj => Object.assign(res, obj));//Merge all data to json object
 
             new Request(`${webURI}api/create-config?res=${JSON.stringify(res)}`, "POST", e => {
-                if (e.status == 200 || e.responseText == "Ok!"){
-                    $("form button").text("Installed!");
-                    //TODO: prints green tick
-                }
+                if (e.status == 200 || e.responseText == "Ok!") drawInstalledButton();
                 else alert(e.responseText || e.statusText)
             }, `res=${JSON.stringify(res)}`);
             break
