@@ -8,14 +8,14 @@ A basic cloud system with typescript, express and mongodb
 ## Installation
 
 - Install dependencies: `yarn` or `npm i`
-- Build the bundle: `yarn build` or `npm run-script build`
+- Build bundle: `yarn build` or `npm run-script build`
 - Start installation: `yarn start` or `npm start`
 
 <img src='https://i.imgur.com/6xK8jBj.jpg'>
 
 <br>
 
-## When you finish de installation you can see this:
+## When you finish the installation you can see this:
 
 <img src='https://i.imgur.com/QEVSMJw.jpg'>
 
@@ -23,28 +23,28 @@ A basic cloud system with typescript, express and mongodb
 
 ## Run cloud
 
-- Delete the last bundle: `yarn clean` or `npm run-script clean` if you are in windows delete the 'dist' folder
-- Build the bundle: `yarn build` or `npm run-script build`
-- Start the cloud: `yarn start` or `npm start`
+- Delete the last bundle: `yarn clean` or `npm run-script clean` if you are in windows delete `dist` folder
+- Build bundle: `yarn build` or `npm run-script build`
+- Start cloud: `yarn start` or `npm start`
 
 <br>
 
 # FAQ
 
-### Where is the logs?
+### Where are the logs?
 
-The logs is in the folder called 'logs'
+The logs are in the folder called `logs`
 
 <br>
 
-### Where is saved the cloud files?
+### Where are the cloud files saved?
 
-The cloud files are saved in the folder called 'data'
+The cloud files are saved in the `data` folder
 
 <br>
 
 ### Can I add routes?
 
-Yes you can add routes editing the file saved in `assets/data/routes.json` and you need to create a view in the folder `views`
+Yes you can add routes editing `assets/data/routes.json` and you need to create a view in the folder `views`
 
 <br>
