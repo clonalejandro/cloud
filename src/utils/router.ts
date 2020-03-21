@@ -67,7 +67,7 @@ export default class Router {
                     this.App.throwErr(err, this.prefix, res)
                 }
             });
-            this.App.debug(`The server is registering route: "${url}" aiming to: ${view}`, this.prefix)
+            this.App.debug(`The server is registering route: "/${url}" aiming to: ${view}`, this.prefix)
         })
     }
 
