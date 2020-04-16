@@ -49,6 +49,7 @@ export default class Auth {
                 if (!user) return done(null, false, req.flash('msg', 'User Not found!'))
                 if (!this.isValidPassword(user, password)) return done(null, false, req.flash('msg', 'Oops! Wrong password.'))
                 
+                this.App.Api.ApiFile.createUserFolder(username);
                 return done(null, user)
             }
         ));
