@@ -1,4 +1,7 @@
 # Cloud ☁️
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c42a345dff6f4d6282b980f437b010e6)](https://app.codacy.com/manual/clonalejandro/cloud?utm_source=github.com&utm_medium=referral&utm_content=clonalejandro/cloud&utm_campaign=Badge_Grade_Dashboard)
+
 A basic cloud system with typescript, express and mongodb
 
 <img width='128' height='128' src='https://i.imgur.com/Qe7LEJp.png'>
